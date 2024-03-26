@@ -1,0 +1,22 @@
+/* main.css */
+
+/* Style pour le conteneur du logo et du titre */
+.container {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+/* Style pour le logo */
+.container img {
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+}
+
+/* Style pour le titre */
+.container h1 {
+  margin: 0;
+  color: #343a40;
+}
