@@ -8,6 +8,12 @@ const registerUser = asyncHandler(async (req, res) => {
     try {
         // Retrieving body informations.
         const { username, email, password } = req.body
+        // Check if the email is in the correct format
+        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/
+        if (!emailRegex.test(email)) {
+            res.status(400);
+            throw new Error('Invalid email format');
+        }
         // Check if all fields are filled
         if (!username || !email || !password) {
             res.status(400)
