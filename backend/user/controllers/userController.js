@@ -7,7 +7,7 @@ const { query } = require('../config/db')
 const registerUser = asyncHandler(async (req, res) => {
     try {
         // Retrieving body informations.
-        const { username, email, password } = req.body
+        const { username, email, password, user_type, address, phone, rib } = req.body
         // Check if the email is in the correct format
         const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/
         if (!emailRegex.test(email)) {
@@ -15,7 +15,7 @@ const registerUser = asyncHandler(async (req, res) => {
             throw new Error('Invalid email format');
         }
         // Check if all fields are filled
-        if (!username || !email || !password) {
+        if (!username || !email || !password || !user_type) {
             res.status(400)
             throw new Error('Please add all fields')
         }
@@ -30,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt)
 
         // Create the user
-        const result = await query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPassword]);
+        const result = await query('INSERT INTO user (username, email, password, user_type, address, phone, rib) VALUES (?, ?, ?, ?, ?, ?, ?)', [username, email, hashedPassword, user_type, address || null, phone || null, rib || null]);
         if (result.affectedRows === 0) {
             throw new Error('Error inserting the user');
         }
