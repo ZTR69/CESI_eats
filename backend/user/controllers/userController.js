@@ -7,7 +7,7 @@ const { query } = require('../config/db')
 const registerUser = asyncHandler(async (req, res) => {
     try {
         // Retrieving body informations.
-        const { username, email, password, user_type, address, phone, rib } = req.body
+        const { username, email, password, address, phone, rib, id_role} = req.body
         // Check if the email is in the correct format
         const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/
         if (!emailRegex.test(email)) {
@@ -15,7 +15,7 @@ const registerUser = asyncHandler(async (req, res) => {
             throw new Error('Invalid email format');
         }
         // Check if all fields are filled
-        if (!username || !email || !password || !user_type) {
+        if (!username || !email || !password) {
             res.status(400)
             throw new Error('Please add all fields')
         }
@@ -30,10 +30,20 @@ const registerUser = asyncHandler(async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt)
 
         // Create the user
-        const result = await query('INSERT INTO user (username, email, password, user_type, address, phone, rib) VALUES (?, ?, ?, ?, ?, ?, ?)', [username, email, hashedPassword, user_type, address || null, phone || null, rib || null]);
-        if (result.affectedRows === 0) {
+        const result_user = await query('INSERT INTO user (username, email, password, address, phone, rib) VALUES (?, ?, ?, ?, ?, ?)', [username, email, hashedPassword, address || null, phone || null, rib || null]);
+        if (result_user.affectedRows === 0) {
             throw new Error('Error inserting the user');
         }
+
+        // Get the id of the inserted user
+        const userId = result_user.insertId;
+
+        // Insert a new row in the user_role table
+        const result_role = await query('INSERT INTO user_has_role (user_id_user, role_id_role) VALUES (?, ?)', [userId, id_role]);
+        if (result_role.affectedRows === 0) {
+            throw new Error('Error inserting the  role of the user');
+        }
+
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });

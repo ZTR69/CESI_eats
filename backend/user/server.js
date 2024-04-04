@@ -9,6 +9,11 @@ const colors = require('colors')
 // Connexion à MongoDB
 const db = require('./config/db.js')
 db.connectToMySQL();
+db.createDeliveryRole();
+db.createRestorerRole();
+db.createCustomerRole();
+db.createTechnicalServiceRole();
+db.createCommercialServiceRole();
 
 // Initialisation d'Express
 const app = express()
