@@ -8,10 +8,10 @@ const {
     getMe
 } = require('../controllers/userController')
 
-const { protect } = require('../middlewares/authMiddleware')
+const { authentificate } = require('../middlewares/authMiddleware')
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)
-router.get('/me', protect, getMe)
+router.get('/getMe', authentificate, getMe)
 
 module.exports = router

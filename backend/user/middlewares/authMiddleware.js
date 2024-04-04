@@ -3,10 +3,9 @@ const asyncHandler = require('express-async-handler')
 const db = require('../config/db')
 
 // Protect routes
-const protect = asyncHandler(async (req, res, next) => {
+const authentificate = asyncHandler(async (req, res, next) => {
     let token = null
     // Token sent format: "Bearer eyJhbGciOi..."
-    console.log(req.headers.authorization)
     if (req.headers.authorization
         && req.headers.authorization.startsWith('Bearer')) {
         try {
@@ -34,4 +33,4 @@ const protect = asyncHandler(async (req, res, next) => {
     }
 })
 
-module.exports = { protect }
+module.exports = { authentificate }

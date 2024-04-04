@@ -15,7 +15,7 @@ const app = express()
 
 // Accepter les données envoyées par formulaire
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 
 // Routes
 app.use('/api/users', require('./routes/userRoutes'))
