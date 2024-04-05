@@ -7,7 +7,7 @@ const { query } = require('../config/db')
 const registerUser = asyncHandler(async (req, res) => {
     try {
         // Retrieving body informations.
-        const { username, email, password, address, phone, rib, id_role} = req.body
+        const { username, email, password, address, phone, rib, id_role, friend_code} = req.body
         // Check if the email is in the correct format
         const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/
         if (!emailRegex.test(email)) {
@@ -19,18 +19,25 @@ const registerUser = asyncHandler(async (req, res) => {
             res.status(400)
             throw new Error('Please add all fields')
         }
+        
         // Check if user already exists
-        const [user] = await query('SELECT * FROM user WHERE email = ?', [email]);
-        if (user && user.length > 0) {
-            res.status(400)
-            throw new Error('User already exists')
+        const users = await query('SELECT * FROM user');
+        const userExists = users.find(user => user.email === email);
+
+        if (userExists) {
+            res.status(400);
+            throw new Error('User already exists');
         }
+
         // Hash the password
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
 
+        // Generate a sponsorship code
+        const sponsorshipCode = Math.floor(Math.random() * 1000000000); // This will generate a random integer between 0 and 999999999
+
         // Create the user
-        const result_user = await query('INSERT INTO user (username, email, password, address, phone, rib) VALUES (?, ?, ?, ?, ?, ?)', [username, email, hashedPassword, address || null, phone || null, rib || null]);
+        const result_user = await query('INSERT INTO user (username, email, password, address, phone, rib, sponsorship_code) VALUES (?, ?, ?, ?, ?, ?, ?)', [username, email, hashedPassword, address || null, phone || null, rib || null, sponsorshipCode]);
         if (result_user.affectedRows === 0) {
             throw new Error('Error inserting the user');
         }
@@ -43,7 +50,15 @@ const registerUser = asyncHandler(async (req, res) => {
         if (result_role.affectedRows === 0) {
             throw new Error('Error inserting the  role of the user');
         }
-
+        // If a sponsorship code was provided, insert a new row in the sponsorship table
+        if (friend_code) {
+            // Check if the sponsorship code exists
+            const [sponsor] = await query('SELECT * FROM user WHERE sponsorship_code = ?', [friend_code]);
+            if (!sponsor) {
+                throw new Error('Sponsorship code does not exist');
+            }
+            await query('UPDATE user SET friend_code = ? WHERE id_user = ?', [friend_code, userId]);
+        }
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -80,10 +95,12 @@ const generateToken = (id) => {
 
 const getMe = asyncHandler(async (req, res) => {
     if (req.user) {
+        const [sponsorshipCodeResult] = await query('SELECT sponsorship_code FROM user WHERE id_user = ?', [req.user.id_user]);
         res.json({
-            _id: req.user._id,
-            name: req.user.name,
+            id_user: req.user.id_user,
+            name: req.user.username,
             email: req.user.email,
+            sponsorshipCode: sponsorshipCodeResult.sponsorship_code,
             token: req.headers.authorization
         });
     } else {

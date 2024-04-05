@@ -16,7 +16,6 @@ const authentificate = asyncHandler(async (req, res, next) => {
             // Get user from the token (id) without the password
             const [user] = await db.query('SELECT * FROM user WHERE id_user = ?', [decoded.id])
             if (user) {
-                console.log(user)
                 delete user.password
                 req.user = user
             }
