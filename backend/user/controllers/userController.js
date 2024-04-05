@@ -78,7 +78,6 @@ const generateToken = (id) => {
     })
 }
 
-
 const getMe = asyncHandler(async (req, res) => {
     if (req.user) {
         res.json({
@@ -93,8 +92,54 @@ const getMe = asyncHandler(async (req, res) => {
     }
 });
 
+const updateUser = asyncHandler(async (req, res) => {
+    try {
+        // Get the user id and the new data from the request
+        const { id, username, email, password, address, phone, rib } = req.body;
+
+        // Check if the user exists
+        const [user] = await query('SELECT * FROM user WHERE id = ?', [id]);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+
+        // Update the user
+        await query('UPDATE user SET username = ?, email = ?, password = ?, address = ?, phone = ?, rib = ? WHERE id = ?', [username, email, password, address, phone, rib, id]);
+
+        // Send a success response
+        res.json({ message: 'User updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+    try {
+        // Get the user id from the request
+        const { id } = req.body;
+
+        // Check if the user exists
+        const [user] = await query('SELECT * FROM user WHERE id = ?', [id]);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+
+        // Delete the user
+        await query('DELETE FROM user WHERE id = ?', [id]);
+
+        // Send a success response
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = {
     registerUser,
     loginUser,
-    getMe
-}
+    getMe,
+    updateUser,
+    deleteUser
+};
