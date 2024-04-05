@@ -137,14 +137,17 @@ const deleteUser = asyncHandler(async (req, res) => {
         const { id } = req.body;
 
         // Check if the user exists
-        const [user] = await query('SELECT * FROM user WHERE id = ?', [id]);
+        const [user] = await query('SELECT * FROM user WHERE id_user = ?', [id]);
         if (!user) {
             res.status(404);
             throw new Error('User not found');
         }
 
+        // Delete the user's roles
+        await query('DELETE FROM user_has_role WHERE user_id_user = ?', [id]);
+
         // Delete the user
-        await query('DELETE FROM user WHERE id = ?', [id]);
+        await query('DELETE FROM user WHERE id_user = ?', [id]);
 
         // Send a success response
         res.json({ message: 'User deleted successfully' });
