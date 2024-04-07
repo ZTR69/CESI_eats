@@ -1,16 +1,21 @@
 const asyncHandler = require('express-async-handler')
-const mongo = require('../config/dbMongo')
+const LogModel = require('../models/logModel')
 
 // Log the request method and URL
 const logMiddleware = asyncHandler(async (req, res, next) => {
-    // Insert the request information into the 'logs' collection
-    await db.collection('logs').insertOne({
+    try {
+        // Créer une instance du modèle Log avec les données de la requête
+        const log = LogModel.create({
         method: req.method,
-        url: req.originalUrl,
-        timestamp: new Date()
-    });
+        url: req.originalUrl
+        });
 
-    next()
-})
+        next();
 
-module.exports = logMiddleware
+    } catch (err) {
+        console.error('Erreur lors de l\'enregistrement du log:', err);
+        next(err);
+    }
+});
+
+module.exports = { logMiddleware }

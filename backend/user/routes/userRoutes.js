@@ -11,11 +11,12 @@ const {
 } = require('../controllers/userController')
 
 const { authentificate } = require('../middlewares/authMiddleware')
+const { logMiddleware } = require('../middlewares/logMiddleware')
 
-router.post('/register', registerUser)
-router.post('/login', loginUser)
-router.get('/getMe', authentificate, getMe)
-router.put('/update', authentificate, updateUser)
-router.delete('/delete', authentificate, deleteUser)
+router.post('/register', logMiddleware, registerUser)
+router.post('/login', logMiddleware, loginUser)
+router.get('/getMe', authentificate, logMiddleware, getMe)
+router.put('/update', authentificate, logMiddleware, updateUser)
+router.delete('/delete', authentificate, logMiddleware, deleteUser)
 
 module.exports = router
