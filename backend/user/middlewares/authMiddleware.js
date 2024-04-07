@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
-const db = require('../config/db')
+const db = require('../config/dbMysql')
 
 // Protect routes
 const authentificate = asyncHandler(async (req, res, next) => {

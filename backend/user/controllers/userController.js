@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
-const UserModel = require('../models/userModel')
-const { query } = require('../config/db')
+const { query } = require('../config/dbMysql')
 
 const registerUser = asyncHandler(async (req, res) => {
     try {
