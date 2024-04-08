@@ -1,5 +1,5 @@
 <template>
-  <button :class="size" class="btn" @click="handleClick">
+  <button class="btn" @click="handleClick" :style="{ width: width, height: height }">
     {{ label }}
   </button>
 </template>
@@ -11,14 +11,17 @@ export default {
       type: String,
       required: true
     },
-    size: {
-      type: String,
-      default: 'medium',
-      validator: value => ['small', 'medium', 'large'].includes(value)
-    },
     handleClick: {
       type: Function,
       required: true
+    },
+    width: {
+      type: String,
+      default: 'auto'
+    },
+    height: {
+      type: String,
+      default: 'auto'
     }
   }
 };
@@ -42,6 +45,6 @@ export default {
 }
 
 .btn:hover {
-  background: #FDFD96; /* Jaune plus foncé lors du survol */
+  background: #FDFD96;
 }
 </style>

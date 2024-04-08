@@ -9,8 +9,8 @@
               <img src="@/assets/logo_big.png" alt="logo_big">
             </a>
 
-            <LocButton address="395 rue du colombier" class="d-none d-lg-block" style="margin-left: 30px"/>
-            <SearchBar class="d-none d-lg-block"/>
+            <LocButton v-if="showAddress" address="395 rue du colombier" class="d-none d-lg-block" style="margin-left: 30px"/>
+            <SearchBar v-if="showSearchBar" class="d-none d-lg-block"/>
 
           </div>
 
@@ -20,7 +20,7 @@
               <img src="@/assets/cart.png" alt="cart">
             </a>
 
-            <div class="d-none d-sm-block">
+            <div v-if="showButtons" class="d-none d-sm-block">
               <CustomButton label="Inscription" size="large" :handleClick="myFunction" />
               <CustomButton label="Connexion" size="large" :handleClick="myFunction" />
             </div>
@@ -37,14 +37,13 @@
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
 
-                <li class="nav-item">
-                  <div class="d-block d-sm-none">
-                    <CustomButton label="Inscription" size="large" :handleClick="myFunction" />
-                  </div>
+                <li v-if="showButtons" class="nav-item">
+                  <CustomButton class="d-block d-sm-none" label="Inscription" width="360px" :handleClick="myFunction" />
                 </li>
-                <li class="nav-item">
-                  <CustomButton class="d-block d-sm-none" label="Connection" size="large" :handleClick="myFunction" />
+                <li v-if="showButtons" class="nav-item">
+                  <CustomButton class="d-block d-sm-none" label="Connection" width="360px" :handleClick="myFunction" />
                 </li>
+                <br>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Créer un compte professionnel</a>
                 </li>
@@ -61,11 +60,11 @@
       </nav>
     </div>
 
-    <div class="row big-padding-2" >
+    <div v-if="showAddress" class="row big-padding-2" >
       <LocButton address="395 rue du colombier" class="d-block d-lg-none"/>
     </div>
 
-    <div class="row big-padding">
+    <div v-if="showSearchBar" class="row big-padding">
       <SearchBar class="d-block d-lg-none"/>
     </div>
   </div>
@@ -85,6 +84,20 @@ export default {
     SearchBar,
     CustomButton
   },
+  props: {
+    showButtons: {
+      type: Boolean,
+      default: true
+    },
+    showSearchBar: {
+      type: Boolean,
+      default: true
+    },
+    showAddress: {
+      type: Boolean,
+      default: true
+    }
+  },
   methods: {
     myFunction() {
       console.log('Clic !');
@@ -92,7 +105,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 
 .padding {

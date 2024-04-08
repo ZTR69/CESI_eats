@@ -1,12 +1,11 @@
 <template>
 
-  <Navbar />
+  <Navbar :showButtons="true" :showSearchBar="true" :showAddress="true" />
 
 
 </template>
 
 <script>
-import CustomButton from '@/components/CustomButton.vue';
 import Navbar from "@/components/Navbar.vue";
 
 export default {
