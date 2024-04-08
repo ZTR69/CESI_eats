@@ -1,24 +1,21 @@
 // Import des modules
 const express = require('express')
 const dotenv = require('dotenv').config()
-const port = process.env.PORT || 5000
-
-// Couleur dans la console
 const colors = require('colors')
 
+// Definition du port
+const port = process.env.PORT || 5000
+
 // Connexion à MySQL
-const db = require('./config/dbMysql.js')
-db.connectToMySQL();
-db.createDeliveryRole();
-db.createRestorerRole();
-db.createCustomerRole();
-db.createTechnicalServiceRole();
-db.createCommercialServiceRole();
+const sequelize = require('./config/dbMysql.js')
+sequelize.authenticate()
+    .then(() => console.log('Connection has been established successfully.'))
+    .catch(error => console.error('Unable to connect to the database:', error));
+
 
 // Connexion to MongoDB
 const connectDB = require('./config/dbMongo')
 connectDB()
-
 
 // Initialisation d'Express
 const app = express()
