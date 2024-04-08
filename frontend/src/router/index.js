@@ -1,10 +1,9 @@
-import HelloWorld from '../component/HelloWorld.vue'
+import App from "@/App.vue";
 
 const routes = [
-    // ...
     {
-        path: '/hello-world',
-        name: 'HelloWorld',
-        component: HelloWorld
+        path: '/home',
+        name: 'Home',
+        component: App.vue
     }
 ]
