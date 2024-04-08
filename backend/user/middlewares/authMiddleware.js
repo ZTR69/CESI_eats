@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
-const db = require('../config/dbMysql')
+const User = require('../models/userModel')
 
 // Protect routes
 const authentificate = asyncHandler(async (req, res, next) => {
@@ -14,7 +14,7 @@ const authentificate = asyncHandler(async (req, res, next) => {
             // Verify the token
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
             // Get user from the token (id) without the password
-            const [user] = await db.query('SELECT * FROM user WHERE id_user = ?', [decoded.id])
+            const user = await User.findByPk(decoded.id, { attributes: { exclude: ['password'] } })
             if (user) {
                 delete user.password
                 req.user = user

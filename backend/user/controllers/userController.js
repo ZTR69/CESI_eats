@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
-const { query } = require('../config/dbMysql')
+const User = require('../models/userModel')
+const UserRole = require('../models/userRoleModel')
+const Role = require('../models/roleModel')
 
 const registerUser = asyncHandler(async (req, res) => {
     try {
@@ -20,8 +22,7 @@ const registerUser = asyncHandler(async (req, res) => {
         }
         
         // Check if user already exists
-        const users = await query('SELECT * FROM user');
-        const userExists = users.find(user => user.email === email);
+        const userExists = await User.findOne({ where: { email } });
 
         if (userExists) {
             res.status(400);
@@ -36,40 +37,54 @@ const registerUser = asyncHandler(async (req, res) => {
         const sponsorshipCode = Math.floor(Math.random() * 1000000000); // This will generate a random integer between 0 and 999999999
 
         // Create the user
-        const result_user = await query('INSERT INTO user (username, email, password, address, phone, rib, sponsorship_code) VALUES (?, ?, ?, ?, ?, ?, ?)', [username, email, hashedPassword, address || null, phone || null, rib || null, sponsorshipCode]);
-        if (result_user.affectedRows === 0) {
-            throw new Error('Error inserting the user');
-        }
+        const user = await User.create({
+            username,
+            email,
+            password: hashedPassword,
+            address: address || null,
+            phone: phone || null,
+            rib: rib || null,
+            sponsorship_code: sponsorshipCode
+        });
 
         // Get the id of the inserted user
-        const userId = result_user.insertId;
+        const userId = user.id_user;
 
         // Insert a new row in the user_role table
-        const result_role = await query('INSERT INTO user_has_role (user_id_user, role_id_role) VALUES (?, ?)', [userId, id_role]);
-        if (result_role.affectedRows === 0) {
-            throw new Error('Error inserting the  role of the user');
+        const userRole = await UserRole.create({
+            user_id_user: userId,
+            role_id_role: id_role
+        });
+
+        if (!userRole) {
+            throw new Error('Error inserting the role of the user');
         }
+
         // If a sponsorship code was provided, insert a new row in the sponsorship table
         if (friend_code) {
             // Check if the sponsorship code exists
-            const [sponsor] = await query('SELECT * FROM user WHERE sponsorship_code = ?', [friend_code]);
+            const sponsor = await User.findOne({ where: { sponsorship_code: friend_code } });
+
             if (!sponsor) {
                 throw new Error('Sponsorship code does not exist');
             }
-            await query('UPDATE user SET friend_code = ? WHERE id_user = ?', [friend_code, userId]);
+
+            const user = await User.findByPk(userId);
+            user.friend_code = friend_code;
+            await user.save();
         }
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-})
+});
 
 const loginUser = asyncHandler(async (req, res) => {
     // Retrieving body infos.
     const { email, password } = req.body
 
     // Check if the email exists in the db
-    const [user] = await query('SELECT * FROM user WHERE email = ?', [email]);
+    const user = await User.findOne({ where: { email } });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
         res.status(401);
@@ -83,23 +98,29 @@ const loginUser = asyncHandler(async (req, res) => {
             token: generateToken(user.id_user)
         })
     }
-})
+});
 
 // Generate JWT
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     })
-}
+};
 
 const getMe = asyncHandler(async (req, res) => {
     if (req.user) {
-        const [sponsorshipCodeResult] = await query('SELECT sponsorship_code FROM user WHERE id_user = ?', [req.user.id_user]);
+        const user = await User.findByPk(req.user.id_user);
+
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+
         res.json({
-            id_user: req.user.id_user,
-            name: req.user.username,
-            email: req.user.email,
-            sponsorshipCode: sponsorshipCodeResult.sponsorship_code,
+            id_user: user.id_user,
+            name: user.username,
+            email: user.email,
+            sponsorshipCode: user.sponsorship_code,
             token: req.headers.authorization
         });
     } else {
@@ -114,14 +135,24 @@ const updateUser = asyncHandler(async (req, res) => {
         const { id, username, email, password, address, phone, rib } = req.body;
 
         // Check if the user exists
-        const [user] = await query('SELECT * FROM user WHERE id_user = ?', [id]);
+        const user = await User.findByPk(id);
         if (!user) {
             res.status(404);
             throw new Error('User not found');
         }
 
+        // Hash the password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
         // Update the user
-        await query('UPDATE user SET username = ?, email = ?, password = ?, address = ?, phone = ?, rib = ? WHERE id_user = ?', [username, email, password, address, phone, rib, id]);
+        user.username = username;
+        user.email = email;
+        user.password = hashedPassword;
+        user.address = address;
+        user.phone = phone;
+        user.rib = rib;
+        await user.save();
 
         // Send a success response
         res.json({ message: 'User updated successfully' });
@@ -136,17 +167,110 @@ const deleteUser = asyncHandler(async (req, res) => {
         const { id } = req.body;
 
         // Check if the user exists
-        const [user] = await query('SELECT * FROM user WHERE id_user = ?', [id]);
+        const user = await User.findByPk(id);
         if (!user) {
             res.status(404);
             throw new Error('User not found');
         }
 
         // Delete the user's roles
-        await query('DELETE FROM user_has_role WHERE user_id_user = ?', [id]);
+        await UserRole.destroy({ where: { user_id_user: id } });
 
         // Delete the user
-        await query('DELETE FROM user WHERE id_user = ?', [id]);
+        await User.destroy({ where: { id_user: id } });
+
+        // Send a success response
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+const getMeCommercial = asyncHandler(async (req, res) => {
+    try {
+        // Get the user id from the request
+        const id = req.query.id;
+
+        // Check if the user exists
+        const user = await User.findByPk(id);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+
+        Role.hasMany(UserRole, { foreignKey: 'role_id_role' });
+        UserRole.belongsTo(Role, { foreignKey: 'role_id_role' });
+
+        // Get the user's roles
+        const roles = await UserRole.findOne({
+            where: { user_id_user: id },
+            include: {
+                model: Role,
+                attributes: ['title', 'description']
+            }
+        });
+
+        // Send the user's roles
+        res.json({ roles });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+const updateCommercial = asyncHandler(async (req, res) => {
+    try {
+        // Get the user id and the new data from the request
+        const { id, username, email, password, address, phone, rib, id_role } = req.body;
+
+        // Check if the user exists
+        const user = await User.findByPk(id);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+
+        // Hash the password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        // Update the user
+        user.username = username;
+        user.email = email;
+        user.password = hashedPassword;
+        user.address = address;
+        user.phone = phone;
+        user.rib = rib;
+        await user.save();
+
+        // Update the user's roles
+        await UserRole.destroy({ where: { user_id_user: id } });
+        await UserRole.create({ user_id_user: id, role_id_role: id_role });
+
+        // Send a success response
+        res.json({ message: 'Commercial updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+const deleteCommercial = asyncHandler(async (req, res) => {
+    try {
+        // Get the user id from the request
+        const { id } = req.body;
+
+        // Check if the user exists
+        const user = await User.findByPk(id);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+
+        // Delete the user's roles
+        await UserRole.destroy({ where: { user_id_user: id } });
+
+        // Delete the user
+        await User.destroy({ where: { id_user: id } });
 
         // Send a success response
         res.json({ message: 'User deleted successfully' });
@@ -160,5 +284,8 @@ module.exports = {
     loginUser,
     getMe,
     updateUser,
-    deleteUser
+    deleteUser,
+    getMeCommercial,
+    updateCommercial,
+    deleteCommercial
 };

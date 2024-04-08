@@ -1,20 +1,29 @@
 // Tab with all permissions associate to url
 
 const permTab = {
-    '/api/users/register': {
+    '/register/': {
         'POST': ['write']
     },
-    '/api/users/login': {
-        'POST': ['write'],
+    '/login/': {
+        'POST': ['write']
     },
-    '/api/users/getMe': {
+    '/getMe/': {
         'GET': ['read']
     },
-    '/api/users/update': {
+    '/update/': {
         'PUT': ['write']
     },
-    '/api/users/delete': {
+    '/delete/': {
         'DELETE': ['delete']
+    },
+    '/getMeCommercial/': {
+        'GET': ['read_all_clients']
+    },
+    '/updateCommercial/': {
+        'PUT': ['write_all_clients']
+    },
+    '/deleteCommercial/': {
+        'DELETE': ['delete_all_clients']
     }
 };
 

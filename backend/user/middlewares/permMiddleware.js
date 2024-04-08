@@ -1,40 +1,63 @@
 const asyncHandler = require('express-async-handler');
-const db = require('../config/dbMysql');
+const User = require('../models/userModel');
+const UserRole = require('../models/userRoleModel');
+const Role = require('../models/roleModel');
+const PermissionsHasRole = require('../models/permissionHasRoleModel');
+const Permission = require('../models/permissionModel');
 const perm = require('../config/perm');
 
-// Get permission from user id
 const permMiddleware = asyncHandler(async (req, res, next) => {
-    try {
-        // Get user id from token
-        const id = req.user.id_user;
-        // Get verb http from request
-        const verb = req.method;
-        // Get permission from permission table
-        const permission = perm.permTab[req.originalUrl][verb][0];
-        
-        // Get permissions from user id
-        const [rows] = await db.query(`
-        SELECT p.name
-        FROM user u
-        JOIN user_has_role ur ON u.id_user = ur.user_id_user
-        JOIN role r ON ur.role_id_role = r.id_role
-        JOIN permissions_has_role pr ON r.id_role = pr.role_id_role
-        JOIN permissions p ON pr.permissions_id_permission = p.id_permission
-        WHERE u.id_user = ?
-        `, [id]);
-        
-        // Compare permissions
-        if (rows.name == permission) {
-            next(); 
-        } else {
-            // The user does not have the requested permission
-            res.status(403).send('Forbidden');
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(401);
-        throw new Error('Not authorized');
+  try {
+    // Get user id from token
+    const id = req.user.id_user;
+    console.log('connected id : ' + id);
+    // Get verb http from request
+    const verb = req.method;
+    // Get permission from permission table
+    const permissionTab = perm.permTab[req.path][verb][0];
+
+    // Define the relationships between the models
+    User.belongsToMany(Role, { through: 'user_has_role', foreignKey: 'user_id_user' });
+    Role.belongsToMany(User, { through: 'user_has_role', foreignKey: 'role_id_role' });
+    Role.belongsToMany(Permission, { through: 'permissions_has_role', foreignKey: 'role_id_role' });
+    Permission.belongsToMany(Role, { through: 'permissions_has_role', foreignKey: 'permissions_id_permission' });
+
+    // Get the user with its roles and permissions
+    const user = await User.findByPk(id, {
+        include: [{
+            model: Role,
+            through: { attributes: [] }, // Ne pas inclure les attributs de la table de jointure
+            include: [{
+            model: Permission,
+            attributes: ['name']
+            }]
+        }]
+    });
+
+    // Extraire les noms de permission
+    const permissionNames = user.Roles.flatMap(role => 
+        role.permissions.map(permission => permission.name)
+    );
+    
+    console.log('sql perm : ' + permissionNames);
+    console.log('permTab : ' + permissionTab);
+
+    // Check if the user has the required permissions
+    const hasPermissions = permissionNames.some(permission => 
+        permissionTab.includes(permission)
+    );
+      
+    if (!hasPermissions) {
+        throw new Error('Insufficient permissions');
     }
+
+    // Continue to the next middleware
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(401);
+    throw new Error('Not authorized, permission failed');
+  }
 });
 
-module.exports = { permMiddleware };
+module.exports = permMiddleware;
