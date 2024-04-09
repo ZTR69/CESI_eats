@@ -95,17 +95,18 @@ const loginUser = asyncHandler(async (req, res) => {
             _id: user.id_user,
             username: user.username,
             email: user.email,
-            token: generateToken(user.id_user)
+            token: generateToken(user.id_user, user.id_role)
         })
     }
 });
 
 // Generate JWT
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d'
-    })
-};
+const generateToken = (id_user, id_role) => {
+    return jwt.sign(
+        { id_user: id_user, id_role: id_role },
+        process.env.JWT_SECRET,
+        { expiresIn: '30d' }  // Token expires in 30 days
+)};
 
 const getMe = asyncHandler(async (req, res) => {
     if (req.user) {
@@ -132,7 +133,8 @@ const getMe = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
     try {
         // Get the user id and the new data from the request
-        const { id, username, email, password, address, phone, rib } = req.body;
+        const id = req.user.id_user;
+        const { username, email, password, address, phone, rib } = req.body;
 
         // Check if the user exists
         const user = await User.findByPk(id);
@@ -164,7 +166,7 @@ const updateUser = asyncHandler(async (req, res) => {
 const deleteUser = asyncHandler(async (req, res) => {
     try {
         // Get the user id from the request
-        const id = req.query.id;
+        const id = req.user.id_user;
 
         // Check if the user exists
         const user = await User.findByPk(id);
@@ -232,7 +234,8 @@ const getMeCommercial = asyncHandler(async (req, res) => {
 const updateCommercial = asyncHandler(async (req, res) => {
     try {
         // Get the user id and the new data from the request
-        const { id, username, email, password, address, phone, rib, id_role } = req.body;
+        const id = req.query.id;
+        const { username, email, password, address, phone, rib, id_role } = req.body;
 
         // Check if the user exists
         const user = await User.findByPk(id);
@@ -264,7 +267,6 @@ const updateCommercial = asyncHandler(async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
 
 const deleteCommercial = asyncHandler(async (req, res) => {
     try {

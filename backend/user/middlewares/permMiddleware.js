@@ -10,7 +10,7 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
   try {
     // Get user id from token
     const id = req.user.id_user;
-    console.log('connected id : ' + id);
+    console.log('connected in permmiddleWare : ' + id);
     // Get verb http from request
     const verb = req.method;
     // Get permission from permission table
