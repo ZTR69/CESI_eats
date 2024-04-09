@@ -164,7 +164,7 @@ const updateUser = asyncHandler(async (req, res) => {
 const deleteUser = asyncHandler(async (req, res) => {
     try {
         // Get the user id from the request
-        const id = req.query.id;
+        const { id } = req.body;
 
         // Check if the user exists
         const user = await User.findByPk(id);
@@ -269,7 +269,7 @@ const updateCommercial = asyncHandler(async (req, res) => {
 const deleteCommercial = asyncHandler(async (req, res) => {
     try {
         // Get the user id from the request
-        const id = req.query.id;
+        const { id } = req.body;
 
         // Check if the user exists
         const user = await User.findByPk(id);
