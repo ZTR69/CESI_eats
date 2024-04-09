@@ -1,4 +1,5 @@
 <template>
+
   <div class="container">
     <div class="row" style="margin-bottom: 100px; margin-top: 0">
       <nav class="navbar navbar-light fixed-top">
@@ -25,10 +26,10 @@
             </a>
 
             <div v-else class="d-none d-sm-block">
-              <router-link to="/login">
+              <router-link v-if="!hideButton" to="/signup">
                 <CustomButton label="Inscription" :handleClick="myFunction" />
               </router-link>
-              <router-link to="/signup">
+              <router-link v-if="!hideButton" to="/login">
                 <CustomButton label="Connexion" :handleClick="myFunction" />
               </router-link>
             </div>
@@ -44,24 +45,24 @@
             </div>
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-                <li v-if="!isConnected" class="nav-item text-center">
-                  <router-link to="/login" style="text-decoration: none">
+                <li v-if="!isConnected && !hideButton" class="nav-item text-center">
+                  <router-link to="/signup" style="text-decoration: none">
                     <CustomButton class="d-block d-sm-none" label="Inscription" width="340px" :handleClick="myFunction" />
                   </router-link>
                 </li>
-                <li v-if="!isConnected" class="nav-item text-center" style="margin-bottom: 10px">
-                  <router-link to="/signup" style="text-decoration: none">
+                <li v-if="!isConnected && !hideButton" class="nav-item text-center" style="margin-bottom: 10px">
+                  <router-link to="/login" style="text-decoration: none">
                     <CustomButton class="d-block d-sm-none" label="Connection" width="340px" :handleClick="myFunction" />
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Créer un compte professionnel</a>
+                  <router-link :to="{ name: 'signup', query: { type: 'pro' } }" class="nav-link">Créer un compte professionnel</router-link>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Ajouter un restaurant</a>
+                  <router-link :to="{ name: 'signup', query: { type: 'rest' } }" class="nav-link">Ajouter un restaurant</router-link>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Devenez coursier-partenaire</a>
+                  <router-link :to="{ name: 'signup', query: { type: 'part' } }" class="nav-link">Devenez coursier-partenaire</router-link>
                 </li>
               </ul>
             </div>
@@ -78,7 +79,6 @@
       <SearchBar class="d-block d-lg-none" placeholder="Rechercher un restaurant"/>
     </div>
   </div>
-
 
 </template>
 
@@ -110,6 +110,10 @@ export default {
     showCart: {
       type: Boolean,
       default: true
+    },
+    hideButton: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
