@@ -86,6 +86,9 @@ const loginUser = asyncHandler(async (req, res) => {
     // Check if the email exists in the db
     const user = await User.findOne({ where: { email } });
 
+    // Get role of the user
+    const role = await UserRole.findOne({ where: { user_id_user: user.id_user } });
+
     if (!user || !(await bcrypt.compare(password, user.password))) {
         res.status(401);
         throw new Error('Invalid email or password');
@@ -95,7 +98,7 @@ const loginUser = asyncHandler(async (req, res) => {
             _id: user.id_user,
             username: user.username,
             email: user.email,
-            token: generateToken(user.id_user, user.id_role)
+            token: generateToken(user.id_user, role.role_id_role)
         })
     }
 });
@@ -310,9 +313,11 @@ const suspendCommercial = asyncHandler(async (req, res) => {
         user.suspended_until = Date.now();
         await user.save();
         await UserRole.update({ role_id_role: 6 }, { where: { user_id_user: id } });
+        // Generate a new token with the updated user role
+        const token = jwt.sign({ id_user: id, id_role: 6 }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-        // Send a success response
-        res.json({ message: 'User suspended successfully' });
+        // Send a success response with the new token
+        res.json({ message: 'User suspended successfully', token: token });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
