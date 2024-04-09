@@ -198,6 +198,10 @@ const getMeCommercial = asyncHandler(async (req, res) => {
             throw new Error('User not found');
         }
 
+        // Get user name, email, address, phone, rib
+        const { username, email, address, phone, rib } = user;
+
+        // Define the relationships between the models
         Role.hasMany(UserRole, { foreignKey: 'role_id_role' });
         UserRole.belongsTo(Role, { foreignKey: 'role_id_role' });
 
@@ -211,7 +215,15 @@ const getMeCommercial = asyncHandler(async (req, res) => {
         });
 
         // Send the user's roles
-        res.json({ roles });
+        res.json({ 
+            id_user: id,
+            username,
+            email,
+            address,
+            phone,
+            rib,
+            roles
+         });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
