@@ -10,7 +10,9 @@ const {
     deleteUser,
     getMeCommercial,
     updateCommercial,
-    deleteCommercial
+    deleteCommercial,
+    suspendCommercial,
+    unsuspendCommercial
 } = require('../controllers/userController')
 
 const { authentificate } = require('../middlewares/authMiddleware')
@@ -25,5 +27,7 @@ router.delete('/delete', authentificate, permMiddleware, logMiddleware, deleteUs
 router.get('/getMeCommercial', authentificate, permMiddleware, logMiddleware, getMeCommercial)
 router.put('/updateCommercial', authentificate, permMiddleware, logMiddleware, updateCommercial)
 router.delete('/deleteCommercial', authentificate, permMiddleware, logMiddleware, deleteCommercial)
+router.put('/suspendCommercial', authentificate, permMiddleware, logMiddleware, suspendCommercial)
+router.put('/unsuspendCommercial', authentificate, permMiddleware, logMiddleware, unsuspendCommercial)
 
 module.exports = router

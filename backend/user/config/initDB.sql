@@ -277,3 +277,4 @@ INSERT INTO permissions_has_role (role_id_role, permissions_id_permission) SELEC
 INSERT INTO permissions_has_role (role_id_role, permissions_id_permission) SELECT 5, p.id_permission FROM permissions p WHERE p.name = 'write_all_clients';
 INSERT INTO permissions_has_role (role_id_role, permissions_id_permission) SELECT 5, p.id_permission FROM permissions p WHERE p.name = 'delete_all_clients';
 INSERT INTO permissions_has_role (role_id_role, permissions_id_permission) SELECT 5, p.id_permission FROM permissions p WHERE p.name = 'suspend_all_clients';
+

@@ -24,6 +24,12 @@ const permTab = {
     },
     '/deleteCommercial/': {
         'DELETE': ['delete_all_clients']
+    },
+    '/suspendCommercial/': {
+        'PUT': ['suspend_all_clients']
+    },
+    '/unsuspendCommercial/': {
+        'PUT': ['unsuspend_all_clients']
     }
 };
 

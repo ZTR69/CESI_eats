@@ -22,6 +22,15 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
     Role.belongsToMany(Permission, { through: 'permissions_has_role', foreignKey: 'role_id_role' });
     Permission.belongsToMany(Role, { through: 'permissions_has_role', foreignKey: 'permissions_id_permission' });
 
+    // Check if user is not suspended
+    const userSuspended = await User.findByPk(id);
+
+    if (userSuspended.suspended_until != null) {
+      console.log('suspended until : ' + userSuspended.suspended_until);
+      res.status(401);
+      throw new Error('User suspended');
+    }
+
     // Get the user with its roles and permissions
     const user = await User.findByPk(id, {
         include: [{

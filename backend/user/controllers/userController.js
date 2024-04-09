@@ -291,6 +291,54 @@ const deleteCommercial = asyncHandler(async (req, res) => {
     }
 });
 
+const suspendCommercial = asyncHandler(async (req, res) => {
+    try {
+        // Get the user id from the request
+        const id = req.query.id;
+        console.log('id to suspend : ' + id);
+
+        // Check if the user exists
+        const user = await User.findByPk(id);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+
+        // Update the user
+        user.suspended_until = Date.now();
+        await user.save();
+
+        // Send a success response
+        res.json({ message: 'User suspended successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+const unsuspendCommercial = asyncHandler(async (req, res) => {
+    try {
+        // Get the user id from the request
+        const id = req.query.id;
+        console.log('id to unsuspend : ' + id);
+
+        // Check if the user exists
+        const user = await User.findByPk(id);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+
+        // Update the user
+        user.suspended_until = null;
+        await user.save();
+
+        // Send a success response
+        res.json({ message: 'User unsuspended successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = {
     registerUser,
     loginUser,
@@ -299,5 +347,7 @@ module.exports = {
     deleteUser,
     getMeCommercial,
     updateCommercial,
-    deleteCommercial
+    deleteCommercial,
+    suspendCommercial,
+    unsuspendCommercial
 };
