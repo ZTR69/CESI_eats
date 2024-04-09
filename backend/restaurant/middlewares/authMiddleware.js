@@ -1,12 +1,10 @@
 const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
-const UserModel = require('../models/userModel')
 
 // Protect routes
-const protect = asyncHandler(async (req, res, next) => {
+const authorization = asyncHandler(async (req, res, next) => {
     let token = null
     // Token sent format: "Bearer eyJhbGciOi..."
-    console.log(req.headers.authorization)
     if (req.headers.authorization
         && req.headers.authorization.startsWith('Bearer')) {
         try {
@@ -14,8 +12,12 @@ const protect = asyncHandler(async (req, res, next) => {
             token = req.headers.authorization.split(' ')[1]
             // Verify the token
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
-            // Get user from the token (id) without the password
-            req.user = await UserModel.findById(decoded.id).select('-password')
+            console.log('connected with JWT : ' + decoded.id_user)
+            // Set req.user to the id and role id from the token
+            req.user = {
+                id_user: decoded.id_user,
+                id_role: decoded.id_role
+            }
             next()
         } catch (error) {
             console.log(error)
@@ -23,9 +25,6 @@ const protect = asyncHandler(async (req, res, next) => {
             throw new Error('Not authorized')
         }
     }
-    if (!token) {
-    res.status(401)
-    throw new Error('Not authorized, no token')
-    }
 })
-module.exports = { protect }
+
+module.exports = { authorization }

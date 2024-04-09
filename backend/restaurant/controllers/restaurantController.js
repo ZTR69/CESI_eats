@@ -1,47 +1,95 @@
-// Import the required modules
 const asyncHandler = require('express-async-handler')
-const query = require('../config/db.js');  // Import the MySQL query function
+const Restaurant = require('../models/restaurantModel')
 
-// Define an asynchronous function to get data from the 'menu' table
-const getData = asyncHandler(async (req, res) => {
-    // Execute the SQL query to fetch all records from the 'menu' table
-    const data = await query('SELECT * FROM menu;');
-    // Send the fetched records as a JSON response
-    res.json(data)
-})
+const createRestaurant = asyncHandler(async (req, res) => {
+    const { Name, Note, Adress } = req.body;
+    const user_id_user = req.user.id_user;
+    console.log('user try to create restaurant with id: ', user_id_user);
 
-// Define an asynchronous function to add a new record to the 'menu' table
-const createData = asyncHandler(async (req, res) => {
-    // Extract 'name' and 'price' from the request body
-    const { name, price } = req.body
-    // Execute the SQL query to insert the new record into the 'menu' table
-    const data = await query('INSERT INTO menu (name, price) VALUES (?, ?);', [name, price])
-    // Send the inserted record as a JSON response
-    res.json(data)
-})
+    // Check if exist a restaurant with the same name
+    const restaurantExist = await Restaurant.findOne({ where: { Name } });
+    if (restaurantExist) {
+        res.status(400);
+        throw new Error('Restaurant already exist');
+    }
+    const restaurant = await Restaurant.create({
+        Name,
+        Note,
+        Adress,
+        user_id_user
+    });
+    if (restaurant) {
+        res.status(201).json({
+            id_restaurant: restaurant.id_restaurant,
+            Name: restaurant.Name,
+            Note: restaurant.Note,
+            Adress: restaurant.Adress,
+            user_id_user: user_id_user
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid restaurant data');
+    }
+});
 
-// Define an asynchronous function to update a record in the 'menu' table
-const updateData = asyncHandler(async (req, res) => {
-    // Extract 'name' and 'price' from the request body
-    const { name, price } = req.body
-    // Execute the SQL query to update the record in the 'menu' table
-    const data = await query('UPDATE menu SET name = ?, price = ? WHERE id = ?;', [name, price, req.params.id])
-    // Send the updated record as a JSON response
-    res.json(data)
-})
+const getRestaurants = asyncHandler(async (req, res) => {
+    const restaurants = await Restaurant.findAll()
+    res.json(restaurants)
+});
 
-// Define an asynchronous function to delete a record from the 'menu' table
-const deleteData = asyncHandler(async (req, res) => {
-    // Execute the SQL query to delete the record from the 'menu' table
-    const data = await query('DELETE FROM menu WHERE id = ?;', req.params.id)
-    // Send the deleted record as a JSON response
-    res.json(data)
-})
+const getRestaurantById = asyncHandler(async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.query.id)
 
-// Export the functions for use in other parts of your application
-module.exports = {
-    getData,
-    createData,
-    updateData,
-    deleteData
-}
+    // Check if the user is the owner of the restaurant
+    if (restaurant.user_id_user !== req.user.id_user) {
+        res.status(401)
+        throw new Error('You are not the owner of this restaurant')
+    }
+
+    if (restaurant) {
+        res.json(restaurant)
+    } else {
+        res.status(404)
+        throw new Error('Restaurant not found')
+    }
+});
+
+const updateRestaurant = asyncHandler(async (req, res) => {
+    const { Name, Note, Adress } = req.body
+    const restaurant = await Restaurant.findByPk(req.query.id)
+    // Check if the user is the owner of the restaurant
+    if (restaurant.user_id_user !== req.user.id_user) {
+        res.status(401)
+        throw new Error('You are not the owner of this restaurant')
+    }
+    if (restaurant) {
+        restaurant.Name = Name
+        restaurant.Note = Note
+        restaurant.Adress = Adress
+        restaurant.user_id_user = req.user.id_user
+        await restaurant.save()
+        res.json(restaurant)
+    } else {
+        res.status(404)
+        throw new Error('Restaurant not found')
+    }
+});
+
+const deleteRestaurant = asyncHandler(async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.query.id)
+    // Check if the user is the owner of the restaurant
+    if (restaurant.user_id_user !== req.user.id_user) {
+        res.status(401)
+        throw new Error('You are not the owner of this restaurant')
+    }
+
+    if (restaurant) {
+        await restaurant.destroy()
+        res.json({ message: 'Restaurant removed' })
+    } else {
+        res.status(404)
+        throw new Error('Restaurant not found')
+    }
+});
+
+module.exports = { createRestaurant, getRestaurants, getRestaurantById, updateRestaurant, deleteRestaurant };
