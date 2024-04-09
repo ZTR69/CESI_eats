@@ -1,37 +1,12 @@
 const asyncHandler = require('express-async-handler');
-const User = require('../models/userModel');
-const UserRole = require('../models/userRoleModel');
-const Role = require('../models/roleModel');
-const PermissionsHasRole = require('../models/permissionHasRoleModel');
-const Permission = require('../models/permissionModel');
-const perm = require('../config/perm');
+const { permTab, getPermTab } = require('../config/perm');
 
 let permissionsByRole = {};
 
-const getPermTab = asyncHandler( async (req, res, next) => {
-  try {
-    // Define associations directly in the function
-    Role.belongsToMany(Permission, { through: 'permissions_has_role', foreignKey: 'role_id_role'});
-    Permission.belongsToMany(Role, { through: 'permissions_has_role', foreignKey: 'permissions_id_permission'});
-
-    const allRoles = await Role.findAll({
-      include: [{
-        model: Permission,
-        attributes: ['name']
-      }]
-    });
-
-    allRoles.forEach(role => {
-      permissionsByRole[role.id_role] = role.permissions.map(permission => permission.name);
-    });
-    
-    next();
-  } catch (error) {
-    console.log(error);
-    res.status(401);
-    throw new Error('Not authorized, permission failed');
-  }
-});
+// Async IIFE
+(async () => {
+  permissionsByRole = await getPermTab();
+})();
 
 const permMiddleware = asyncHandler(async (req, res, next) => {
   try {
@@ -49,7 +24,7 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
     }
 
     // Get permission from permission table
-    const permissionTab = perm.permTab[req.path][verb][0];
+    const permissionTab = permTab[req.path][verb][0];
     const permissionNames = permissionsByRole[id_role] || [];
 
     console.log('sql perm : ' + permissionNames);
@@ -73,4 +48,4 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = { permMiddleware, getPermTab };
+module.exports = { permMiddleware };
