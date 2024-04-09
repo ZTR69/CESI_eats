@@ -48,8 +48,11 @@ const User = sequelize.define('User', {
   friend_code: {
     type: DataTypes.INTEGER,
     allowNull: true
+  },
+  suspended_until: {
+    type: DataTypes.DATE,
+    allowNull: true,
   }
-  
 }, {
   tableName: 'user',
   timestamps: false
