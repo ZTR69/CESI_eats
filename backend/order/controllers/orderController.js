@@ -15,6 +15,35 @@ const getOrders = asyncHandler(async (req, res) => {
     res.status(200).json(orders)
 })
 
+const getRestaurantOrders = asyncHandler(async (req, res) => {
+    const orders = await OrderModel.find({ restaurantID: req.params.restaurantID })
+    if (!orders) {
+        res.status(400)
+        throw new Error('Orders not found')
+    }
+    res.status(200).json(orders)
+})
+
+const getRestaurantPendingOrders = asyncHandler(async (req, res) => {
+    const orders = await OrderModel.find({ restaurantID: req.params.restaurantID, status: 'pending'})
+    if (!orders) {
+        res.status(400)
+        throw new Error('Orders not found')
+    }
+    res.status(200).json(orders)
+})
+
+const uppdateStatus = asyncHandler(async (req, res) => {
+    const order = await OrderModel.findOne({ orderID: req.params.orderID })
+    if (!order) {
+        res.status(400)
+        throw new Error('Order not found')
+    }
+    const updatedOrder = await OrderModel.findOneAndUpdate({orderID: req.params.orderID},
+        { status: req.body.status }, { new: true })
+    res.status(200).json(updatedOrder)
+})
+
 const addOrder = asyncHandler(async (req, res) => {
     if (!req.body.restaurantID) {
         res.status(400)
@@ -30,7 +59,7 @@ const addOrder = asyncHandler(async (req, res) => {
     }
     if (!req.body.addressDelivery) {
         res.status(400)
-        throw new Error('Error no User')
+        throw new Error('Error no addressDelivery')
     }
     const currentDate = new Date().toISOString()
     const order = await OrderModel.create({ orderID: new mongoose.Types.ObjectId(), restaurantID: req.body.restaurantID, items: { itemName: req.body.itemName, prix: "10"}, userID: req.body.userID, date: currentDate, addressDelivery: req.body.addressDelivery})
@@ -73,6 +102,9 @@ const deleteItem = asyncHandler(async (req, res) => {
 module.exports = {
     getOrder,
     getOrders,
+    getRestaurantOrders,
+    getRestaurantPendingOrders,
+    uppdateStatus,
     addOrder,
     addItem,
     deleteItem,
