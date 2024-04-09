@@ -1,28 +1,36 @@
 <template>
   <div class="container">
-    <div class="row" style="margin-bottom: 100px">
+    <div class="row" style="margin-bottom: 100px; margin-top: 0">
       <nav class="navbar navbar-light fixed-top">
         <div class="container-fluid d-flex justify-content-between" style="background-color: white">
 
           <div class="d-flex align-items-center">
-            <a href="#">
-              <img src="@/assets/logo_big.png" alt="logo_big">
-            </a>
+
+            <router-link to="/">
+              <img src="../assets/img/logo_big.png" alt="logo_big">
+            </router-link>
 
             <LocButton v-if="showAddress" address="395 rue du colombier" class="d-none d-lg-block" style="margin-left: 30px"/>
-            <SearchBar v-if="showSearchBar" class="d-none d-lg-block"/>
-
+            <SearchBar v-if="showSearchBar" message="Recherchez un restaurant" class="d-none d-lg-block"/>
           </div>
 
           <div class="d-flex align-items-center">
 
-            <a href="#" class="padding-cart">
-              <img src="@/assets/cart.png" alt="cart">
+            <a v-if="showCart" href="#" class="padding-cart">
+              <img src="../assets/img/cart.png" alt="cart">
             </a>
 
-            <div v-if="showButtons" class="d-none d-sm-block">
-              <CustomButton label="Inscription" size="large" :handleClick="myFunction" />
-              <CustomButton label="Connexion" size="large" :handleClick="myFunction" />
+            <a v-if="isConnected" href="#">
+              <img src="../assets/img/profil.png" alt="profile">
+            </a>
+
+            <div v-else class="d-none d-sm-block">
+              <router-link to="/login">
+                <CustomButton label="Inscription" :handleClick="myFunction" />
+              </router-link>
+              <router-link to="/signup">
+                <CustomButton label="Connexion" :handleClick="myFunction" />
+              </router-link>
             </div>
 
             <button class="navbar-toggler padding" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLightNavbar" aria-controls="offcanvasLightNavbar" aria-label="Toggle navigation">
@@ -35,15 +43,17 @@
               <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-              <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
-
-                <li v-if="showButtons" class="nav-item">
-                  <CustomButton class="d-block d-sm-none" label="Inscription" width="360px" :handleClick="myFunction" />
+              <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                <li v-if="!isConnected" class="nav-item text-center">
+                  <router-link to="/login" style="text-decoration: none">
+                    <CustomButton class="d-block d-sm-none" label="Inscription" width="340px" :handleClick="myFunction" />
+                  </router-link>
                 </li>
-                <li v-if="showButtons" class="nav-item">
-                  <CustomButton class="d-block d-sm-none" label="Connection" width="360px" :handleClick="myFunction" />
+                <li v-if="!isConnected" class="nav-item text-center" style="margin-bottom: 10px">
+                  <router-link to="/signup" style="text-decoration: none">
+                    <CustomButton class="d-block d-sm-none" label="Connection" width="340px" :handleClick="myFunction" />
+                  </router-link>
                 </li>
-                <br>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Créer un compte professionnel</a>
                 </li>
@@ -65,7 +75,7 @@
     </div>
 
     <div v-if="showSearchBar" class="row big-padding">
-      <SearchBar class="d-block d-lg-none"/>
+      <SearchBar class="d-block d-lg-none" placeholder="Rechercher un restaurant"/>
     </div>
   </div>
 
@@ -85,15 +95,19 @@ export default {
     CustomButton
   },
   props: {
-    showButtons: {
+    isConnected: {
       type: Boolean,
-      default: true
+      default: false
     },
     showSearchBar: {
       type: Boolean,
       default: true
     },
     showAddress: {
+      type: Boolean,
+      default: true
+    },
+    showCart: {
       type: Boolean,
       default: true
     }
@@ -105,11 +119,17 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 
+.navbar {
+  margin-top: 0;
+  padding-top: 0;
+}
+
 .padding {
-  margin-left: 15px;
-  margin-right: 15px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .big-padding {
