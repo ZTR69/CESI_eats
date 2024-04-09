@@ -309,6 +309,7 @@ const suspendCommercial = asyncHandler(async (req, res) => {
         // Update the user
         user.suspended_until = Date.now();
         await user.save();
+        await UserRole.update({ role_id_role: 6 }, { where: { user_id_user: id } });
 
         // Send a success response
         res.json({ message: 'User suspended successfully' });

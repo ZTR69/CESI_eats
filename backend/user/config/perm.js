@@ -16,19 +16,19 @@ const permTab = {
     '/delete': {
         'DELETE': ['delete']
     },
-    '/getMeCommercial/': {
+    '/getMeCommercial': {
         'GET': ['read_all_clients']
     },
-    '/updateCommercial/': {
+    '/updateCommercial': {
         'PUT': ['write_all_clients']
     },
-    '/deleteCommercial/': {
+    '/deleteCommercial': {
         'DELETE': ['delete_all_clients']
     },
-    '/suspendCommercial/': {
+    '/suspendCommercial': {
         'PUT': ['suspend_all_clients']
     },
-    '/unsuspendCommercial/': {
+    '/unsuspendCommercial': {
         'PUT': ['unsuspend_all_clients']
     }
 };

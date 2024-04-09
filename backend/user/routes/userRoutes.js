@@ -17,11 +17,11 @@ const {
 
 const { authorization } = require('../middlewares/authMiddleware')
 const { logMiddleware } = require('../middlewares/logMiddleware')
-const permMiddleware = require('../middlewares/permMiddleware')
+const { permMiddleware, getPermTab } = require('../middlewares/permMiddleware')
 
 router.post('/register', logMiddleware, registerUser)
 router.post('/login', logMiddleware, loginUser)
-router.get('/getMe', authorization, permMiddleware, logMiddleware, getMe)
+router.get('/getMe', authorization, getPermTab, permMiddleware, logMiddleware, getMe)
 router.put('/update', authorization, permMiddleware, logMiddleware, updateUser)
 router.delete('/delete', authorization, permMiddleware, logMiddleware, deleteUser)
 router.get('/getMeCommercial', authorization, permMiddleware, logMiddleware, getMeCommercial)
