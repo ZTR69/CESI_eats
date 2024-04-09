@@ -43,7 +43,22 @@ const permTab = {
     },
     '/delete': {
         'DELETE': ['delete_restaurant']
-    }
+    },
+    '/getMenu': {
+        'GET': ['read_all_menu']
+    },
+    '/getByIdMenu': {
+        'GET': ['read_menu']
+    },
+    '/createMenu': {
+        'POST': ['create_menu']
+    },
+    '/updateMenu': {
+        'PUT': ['update_menu']
+    },
+    '/deleteMenu': {
+        'DELETE': ['delete_menu']
+    },
 };
 
 module.exports = { permTab, getPermTab };

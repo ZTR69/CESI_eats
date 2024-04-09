@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Routes
 app.use('/api/restaurant', require('./routes/restaurantRoutes'))
+app.use('/api/menu', require('./routes/menuRoutes'))
 
 // Launch server
 app.listen(port, () => {
