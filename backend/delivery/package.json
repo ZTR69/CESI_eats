@@ -1,0 +1,17 @@
+{
+  "name": "delivery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "node --watch server.js"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.1",
+    "express-async-handler": "^1.2.0",
+    "mongoose": "^8.2.3"
+  }
+}
