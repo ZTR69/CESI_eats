@@ -47,7 +47,7 @@ const initPermissions = asyncHandler( async () => {
     { roleId: 2, permissions: ['read', 'write', 'delete', 'read_restaurant', 'create_restaurant', 'update_restaurant', 'delete_restaurant', 'read_menu', 'create_menu', 'update_menu', 'delete_menu'] },
     { roleId: 3, permissions: ['read', 'write', 'delete'] },
     { roleId: 4, permissions: ['read', 'write', 'delete'] },
-    { roleId: 5, permissions: ['read', 'write', 'delete', 'read_all_clients', 'write_all_clients', 'delete_all_clients', 'suspend_all_clients', 'unsuspend_all_clients', 'read_all_clients'] },
+    { roleId: 5, permissions: ['read', 'write', 'delete', 'read_all_clients', 'write_all_clients', 'delete_all_clients', 'suspend_all_clients', 'read_all_clients'] },
     { roleId: 6, permissions: ['no_perm'] }
   ];
 
@@ -57,7 +57,7 @@ const initPermissions = asyncHandler( async () => {
   for (const { roleId, permissions } of rolePermissions) {
     for (const permissionName of permissions) {
       const permission = allPermissions.find(p => p.name === permissionName);
-      if (permission) {;
+      if (permission) {
         await PermissionsHasRole.create({ role_id_role: roleId, permissions_id_permission: permission.id_permission });
       } else {
         console.error(`Permission ${permissionName} not found.`);
@@ -65,31 +65,6 @@ const initPermissions = asyncHandler( async () => {
     }
   }
 });
-
-const getPermTab = asyncHandler( async () => {
-    try {
-      // Define associations directly in the function
-      Role.belongsToMany(Permission, { through: 'permissions_has_role', foreignKey: 'role_id_role'});
-      Permission.belongsToMany(Role, { through: 'permissions_has_role', foreignKey: 'permissions_id_permission'});
-  
-      const allRoles = await Role.findAll({
-        include: [{
-          model: Permission,
-          attributes: ['name'],
-          through: { attributes: [] } // Exclude through table fields
-        }]
-      });
-
-      const permissionsByRole = {};
-  
-      allRoles.forEach(role => {
-        permissionsByRole[role.id_role] = role.permissions.map(permission => permission.name);
-      });
-      return permissionsByRole;
-    } catch (error) {
-      console.log(error);
-    }
-  });
 
 const permTab = {
     '/register': {
@@ -124,4 +99,4 @@ const permTab = {
     }
 };
 
-module.exports = { permTab, getPermTab, initPermissions };
+module.exports = { permTab, initPermissions };
