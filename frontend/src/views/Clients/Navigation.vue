@@ -1,20 +1,20 @@
 <template>
-  <div>
-    <Navbar />
-    <h1 style="margin-top: 100px;">Liste des restaurants</h1>
-    <div class="card-grid"> 
-      <UserCard
-        v-for="restaurant in restaurants"
-        :key="restaurant.id"
-        :id="restaurant.id"
-        :image="restaurant.image"
-        :title="restaurant.title"
-        :time="restaurant.time"
-        :address="restaurant.address"
-        :url="restaurant.url"
-      />
+    <div>
+      <NavigationBar />
+      <h1>Liste des restaurants</h1>
+      <div class="card-grid"> 
+        <UserCard
+          v-for="restaurant in restaurants"
+          :key="restaurant.id"
+          :id="restaurant.id"
+          :image="restaurant.image"
+          :title="restaurant.title"
+          :time="restaurant.time"
+          :address="restaurant.address"
+          :url="restaurant.url"
+        />
+      </div>
     </div>
-  </div>
 </template>
 
 <style>
@@ -36,8 +36,7 @@ h1 {
 </style>
 
 <script>
-import CustomButton from '@/components/CustomButton.vue';
-import Navbar from "@/components/Navbar.vue";
+import NavigationBar from "@/components/NavigationBar.vue";
 import UserCard from '@/components/UserCard.vue';
 import sourceData from "@/test_data/restaurants.json";
 
@@ -48,7 +47,7 @@ export default {
     };
   },
   components: {
-    Navbar,
+    NavigationBar,
     UserCard
   },
 };

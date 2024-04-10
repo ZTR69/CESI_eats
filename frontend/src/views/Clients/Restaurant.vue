@@ -1,6 +1,6 @@
 <template>
-    <Navbar />
-    <div class="container" style="margin-top: 100px; border: 1px solid #e0e0e0; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 50px;">
+    <NavigationBar />
+    <div class="container" style="margin-top: 0px; border: 1px solid #e0e0e0; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 50px;">
         <div class="row">
             <div class="col-lg-2">
                 <div class="image-container">
@@ -33,6 +33,7 @@
                                 :description="menu.description"
                                 :price="menu.price"
                             />
+                            
                     </div>
                 </div>
             </div>
@@ -44,7 +45,7 @@
 import restaurantData from "@/test_data/restaurants.json";
 import menuData from "@/test_data/menus.json";
 import MenuComponent from "@/components/MenuComponent.vue";
-import Navbar from "@/components/Navbar.vue";
+import NavigationBar from "@/components/NavigationBar.vue";
 
 export default {
   computed: {
@@ -60,7 +61,7 @@ export default {
   },
   components: {
     MenuComponent,
-    Navbar
+    Na
   }
 };
 </script>
