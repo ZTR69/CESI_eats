@@ -1,5 +1,5 @@
 <template>
-    <NavigationBar />
+    <NavigationBar :showCart="true" />
     <div class="container" style="margin-top: 0px; border: 1px solid #e0e0e0; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 50px;">
         <div class="row">
             <div class="col-lg-2">
@@ -101,7 +101,6 @@ h2 {
 
 .restaurant-time {
     font-family: Montserrat, sans-serif;
-    font-size: 10.25rem;
     text-align: left;
 }
 </style>

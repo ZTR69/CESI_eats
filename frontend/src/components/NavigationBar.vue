@@ -17,13 +17,13 @@
 
           <div class="d-flex align-items-center">
 
-            <router-link v-if="isConnected" :to="{ name: 'profile', query: {getParam: 'info'} }">
+            <router-link v-if="showCart" to="/cart" class="padding-cart">
               <img src="../assets/img/cart.png" alt="cart">
             </router-link>
 
-            <a v-if="isConnected" href="#">
+            <router-link v-if="isConnected" :to="{ name: 'profile', query: {getParam: 'info'} }">
               <img src="../assets/img/profil.png" alt="profile">
-            </a>
+            </router-link>
 
             <div v-else class="d-none d-sm-block">
               <router-link v-if="!hideButton" to="/signup">
@@ -84,6 +84,7 @@ import 'bootstrap';
 import CustomButton from '@/components/CustomButton.vue';
 import SearchBar from "@/components/SearchBar.vue";
 import LocButton from "@/components/LocButton.vue";
+import router from '@/router';
 
 export default {
   components: {

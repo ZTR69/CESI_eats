@@ -17,24 +17,6 @@
     </div>
 </template>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
-h1 {
-  font-family: Montserrat, sans-serif;
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: left;
-  margin-left: 25px;
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-</style>
-
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
 import UserCard from '@/components/UserCard.vue';

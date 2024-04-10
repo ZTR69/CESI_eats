@@ -69,20 +69,3 @@ export default {
    font-size: 1rem;
  }
 </style>
-
-<style>
- .btn-primary {
-   background: #434343;
-   color: white;
-   border : none;
-   border-radius: 4px;
-   font-family: Montserrat, sans-serif;
-   font-size: 0.90rem;
-   font-weight: bold;
-   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
- }
-
- .btn-primary:hover {
-   background: #FDE219;
- }
- </style>

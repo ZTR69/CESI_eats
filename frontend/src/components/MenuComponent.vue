@@ -8,6 +8,7 @@
                     <p class="card-text">Prix : {{ price }} €</p>
                     <button class="btn btn-primary" v-if="showAddToCartButton" @click="addToCart">Ajouter au
                         panier</button>
+                    <button class="btn btn-primary" v-if="showRemoveFromCartButton" @click="emitRemoveFromCart">Retirer du panier</button>
                 </div>
             </div>
         </div>
@@ -38,8 +39,28 @@ export default {
             type: Boolean,
             default: false
         },
+        showRemoveFromCartButton: {
+            type: Boolean,
+            default: false
+        }
         // Rest of the props...
     },
+    methods: {
+        addToCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({
+                id: this.id,
+                title: this.title,
+                description: this.description,
+                price: this.price
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            console.log('Added to cart:', this.title);
+        },
+        emitRemoveFromCart() {
+      this.$emit('removeFromCart', this.id);
+    },
+    }
 }
 
 </script>
