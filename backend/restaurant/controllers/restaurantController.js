@@ -94,4 +94,14 @@ const deleteRestaurant = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createRestaurant, getRestaurants, getRestaurantById, updateRestaurant, deleteRestaurant };
+const initRestaurants = asyncHandler(async () => {
+    // Create some restaurants
+    await Restaurant.bulkCreate([
+        { Name: 'McDonalds', Note: 4.5, Adress: '1 rue de la paix', user_id_user: 1, Image: 'https://www.mcdonalds.fr/sites/default/files/2021-03/Logo_McDo_0.png' },
+        { Name: 'KFC', Note: 4.3, Adress: '2 rue de la paix', user_id_user: 2, Image: 'https://www.kfc.fr/sites/default/files/2021-03/Logo_KFC_0.png' },
+        { Name: 'Burger King', Note: 4.4, Adress: '3 rue de la paix', user_id_user: 3, Image: 'https://www.burgerking.fr/sites/default/files/2021-03/Logo_BK_0.png' },
+        { Name: 'Quick', Note: 4.1, Adress: '4 rue de la paix', user_id_user: 4, Image: 'https://www.quick.fr/sites/default/files/2021-03/Logo_Quick_0.png' }
+    ]);
+});
+
+module.exports = { createRestaurant, getRestaurants, getRestaurantById, updateRestaurant, deleteRestaurant, initRestaurants };

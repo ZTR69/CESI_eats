@@ -20,7 +20,7 @@ const Article = sequelize.define('Article', {
         allowNull: false
     },
     Image: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.TEXT,
         allowNull: false
     }
 }, {
