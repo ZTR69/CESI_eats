@@ -12,6 +12,17 @@ sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
 
+// Import des modèles
+const Restaurant = require('./models/restaurantModel')
+const Menu = require('./models/menuModel')
+
+sequelize.sync()
+  .then(() => {
+    console.log('All tables have been successfully created.');
+  })
+  .catch(error => console.error('Unable to create tables:', error));
+
+
 // Connexion to MongoDB
 const connectDB = require('./config/dbMongo')
 connectDB()
