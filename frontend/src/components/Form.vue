@@ -22,6 +22,7 @@
 <script setup>
 import CustomButton from "@/components/CustomButton.vue";
 import {reactive} from "vue";
+import apiService from "@/services/apiService.js"; // Import apiService
 
 const props = defineProps({
   items: Array,
@@ -45,24 +46,14 @@ const handleSubmit = async () => {
   if (props.id_role !== null) {
     formData.id_role = props.id_role;
   }
-  const requestOptions = {
-    method: props.verb.toUpperCase(),
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(formData)
-  };
-  const url = "http://localhost:5000" + props.route;
-  console.log("URL: ", url); // Log the URL
-  console.log("Request Options: ", requestOptions); // Log the request options
   try {
-    const response = await fetch(url, requestOptions);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
+    const data = apiService.fetchJson(props.route, "http://localhost:5000", props.verb, formData);
     console.log(data);
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
+  await apiService
+
 };
 
 </script>
