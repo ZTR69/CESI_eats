@@ -1,0 +1,19 @@
+{
+  "name": "order",
+  "version": "1.0.0",
+  "description": "Management of the order",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "node --watch server.js"
+  },
+  "author": "Axel LOPES",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "mongoose": "^8.3.0"
+  }
+}
