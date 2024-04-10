@@ -1,6 +1,6 @@
 <template>
   <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
-  <Form :items="['Adresse mail', 'Mot de passe']" title="Connexion"/>
+  <Form :items="[['Adresse mail','email'], ['Mot de passe', 'password']]" title="Connexion"/>
 </template>
 
 <script setup>
