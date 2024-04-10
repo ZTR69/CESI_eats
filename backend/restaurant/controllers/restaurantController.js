@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler')
 const Restaurant = require('../models/restaurantModel')
 
 const createRestaurant = asyncHandler(async (req, res) => {
-    const { Name, Note, Adress } = req.body;
+    const { Name, Note, Adress, Image } = req.body;
     const user_id_user = req.user.id_user;
     console.log('user try to create restaurant with id: ', user_id_user);
 
@@ -16,7 +16,8 @@ const createRestaurant = asyncHandler(async (req, res) => {
         Name,
         Note,
         Adress,
-        user_id_user
+        user_id_user,
+        Image
     });
     if (restaurant) {
         res.status(201).json({
@@ -24,7 +25,8 @@ const createRestaurant = asyncHandler(async (req, res) => {
             Name: restaurant.Name,
             Note: restaurant.Note,
             Adress: restaurant.Adress,
-            user_id_user: user_id_user
+            user_id_user: user_id_user,
+            Image: restaurant.Image
         });
     } else {
         res.status(400);

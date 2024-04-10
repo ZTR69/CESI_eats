@@ -18,6 +18,10 @@ const Article = sequelize.define('Article', {
     Price: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    Image: {
+        type: DataTypes.STRING(45),
+        allowNull: false
     }
 }, {
     tableName: 'Article',

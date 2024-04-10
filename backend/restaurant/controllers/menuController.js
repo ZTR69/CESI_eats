@@ -14,12 +14,13 @@ Article.belongsToMany(Menu, {
 });
 
 const createMenuWithArticles = asyncHandler(async (req, res) => {
-    const { Name, Description, Price, Restaurants_id_restaurant, articles } = req.body;
+    const { Name, Description, Price, Restaurants_id_restaurant, articles, Image } = req.body;
     const menu = await Menu.create({
         Name,
         Description,
         Price,
-        Restaurants_id_restaurant
+        Restaurants_id_restaurant,
+        Image
     });
 
     console.log('menu' + menu);
@@ -35,7 +36,8 @@ const createMenuWithArticles = asyncHandler(async (req, res) => {
             Description: menu.Description,
             Price: menu.Price,
             Restaurants_id_restaurant: menu.Restaurants_id_restaurant,
-            articles: articleInstances
+            articles: articleInstances,
+            Image: menu.Image
         });
     } else {
         res.status(400);
@@ -59,7 +61,7 @@ const getMenuById = asyncHandler(async (req, res) => {
 });
 
 const updateMenu = asyncHandler(async (req, res) => {
-    const { Name, Description, Price, Restaurants_id_restaurant, articles } = req.body;
+    const { Name, Description, Price, Restaurants_id_restaurant, articles, Image } = req.body;
     const menu = await Menu.findByPk(req.query.id, { include: Article });
 
     if (menu) {
@@ -67,6 +69,7 @@ const updateMenu = asyncHandler(async (req, res) => {
         menu.Description = Description;
         menu.Price = Price;
         menu.Restaurants_id_restaurant = Restaurants_id_restaurant;
+        menu.Image = Image;
         await menu.save();
 
         const articleInstances = await Promise.all(articles.map(async article => {

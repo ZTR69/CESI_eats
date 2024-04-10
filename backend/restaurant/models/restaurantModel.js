@@ -22,6 +22,10 @@ const Restaurant = sequelize.define('Restaurant', {
     user_id_user: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    Image: {
+        type: DataTypes.STRING(45),
+        allowNull: false
     }
 }, {
     tableName: 'Restaurants',

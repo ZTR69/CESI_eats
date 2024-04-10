@@ -22,6 +22,10 @@ const Menu = sequelize.define('Menu', {
     Restaurants_id_restaurant: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    Image: {
+        type: DataTypes.STRING(45),
+        allowNull: false
     }
 }, {
     tableName: 'Menu',
