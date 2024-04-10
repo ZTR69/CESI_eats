@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/NavigationBar.vue";
 import CustomButton from "@/components/CustomButton.vue";
 
 const myFunction = () => {

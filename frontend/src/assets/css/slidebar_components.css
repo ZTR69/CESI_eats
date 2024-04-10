@@ -1,0 +1,14 @@
+.padding {
+    margin-left: 200px;
+}
+
+.info-text {
+    text-align: center;
+    font-size: large;
+}
+
+@media (max-width: 600px) {
+    .padding {
+        margin-left: 0;
+    }
+}

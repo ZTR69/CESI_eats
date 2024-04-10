@@ -34,7 +34,7 @@
               </router-link>
             </div>
 
-            <button class="navbar-toggler padding" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLightNavbar" aria-controls="offcanvasLightNavbar" aria-label="Toggle navigation">
+            <button v-if="!hideToggle" class="navbar-toggler padding" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLightNavbar" aria-controls="offcanvasLightNavbar" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
           </div>
@@ -54,9 +54,6 @@
                   <router-link to="/login" style="text-decoration: none">
                     <CustomButton class="d-block d-sm-none" label="Connection" width="340px" :handleClick="myFunction" />
                   </router-link>
-                </li>
-                <li class="nav-item">
-                  <router-link :to="{ name: 'signup', query: { type: 'pro' } }" class="nav-link">Créer un compte professionnel</router-link>
                 </li>
                 <li class="nav-item">
                   <router-link :to="{ name: 'signup', query: { type: 'rest' } }" class="nav-link">Ajouter un restaurant</router-link>
@@ -112,6 +109,10 @@ export default {
       default: true
     },
     hideButton: {
+      type: Boolean,
+      default: false
+    },
+    hideToggle:{
       type: Boolean,
       default: false
     }

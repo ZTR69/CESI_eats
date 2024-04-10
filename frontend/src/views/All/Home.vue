@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Navbar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false" />
+    <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false" />
     <div class="centered">
       <h1 style="margin-bottom: 30px">Recevez vos repas et délices favoris, directement à votre porte.</h1>
       <SearchBar message="Recherchez votre adresse"/>
@@ -9,8 +9,8 @@
 </template>
 
 <script setup>
-import Navbar from "@/components/Navbar.vue";
 import SearchBar from "@/components/SearchBar.vue";
+import NavigationBar from "@/components/NavigationBar.vue";
 </script>
 
 <style scoped>

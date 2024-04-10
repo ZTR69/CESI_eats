@@ -1,11 +1,11 @@
 <template>
-  <Navbar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
+  <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
   <Form :items="['Adresse mail', 'Mot de passe']" title="Connexion"/>
 </template>
 
 <script setup>
-import Navbar from "@/components/Navbar.vue";
 import Form from "@/components/Form.vue";
+import NavigationBar from "@/components/NavigationBar.vue";
 
 const myFunction = () => {
   alert("Inscription réussie");
@@ -15,6 +15,6 @@ const myFunction = () => {
 
 <style>
 body {
-  background-color: #FEFFED;
+  background-color: #FEFDFB;
 }
 </style>
