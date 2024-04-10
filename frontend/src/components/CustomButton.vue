@@ -13,7 +13,7 @@ export default {
     },
     handleClick: {
       type: Function,
-      required: true
+      required: false // handleClick n'est plus obligatoire
     },
     width: {
       type: String,

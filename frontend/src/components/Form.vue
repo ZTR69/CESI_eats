@@ -3,14 +3,14 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-md-6">
-          <h2 class="text-center mb-5">{{ title }}</h2> <!-- Utilisation de la prop title -->
-          <form>
+          <h2 class="text-center mb-5">{{ title }}</h2>
+          <form @submit.prevent="handleSubmit">
             <div class="form-group mb-3" v-for="(item, index) in items" :key="index">
-              <label :for="item" style="margin-left: 5px">{{ item }}</label>
-              <input type="text" class="form-control" :id="item" :placeholder="'Entrez votre ' + item">
+              <label :for="item[1]" style="margin-left: 5px">{{ item[0] }}</label>
+              <input type="text" class="form-control" :id="item[1]" v-model="formData[item[1]]" :placeholder="'Entrez votre ' + item[0]">
             </div>
             <div class="d-flex justify-content-center mt-5">
-              <CustomButton :handle-click="myFunction" label="Valider" width="200px"/>
+              <CustomButton label="Valider" width="200px"/>
             </div>
           </form>
         </div>
@@ -20,17 +20,42 @@
 </template>
 
 <script setup>
-import Navbar from "@/components/NavigationBar.vue";
 import CustomButton from "@/components/CustomButton.vue";
-
-const myFunction = () => {
-  alert("Inscription réussie");
-}
+import {reactive} from "vue";
+import apiService from "@/services/apiService.js"; // Import apiService
 
 const props = defineProps({
   items: Array,
-  title: String // Ajout de la prop title
+  title: String,
+  id_role: {
+    type: Number,
+    default: null
+  },
+  verb: {
+    type: String,
+    default: 'get'
+  },
+  route: {
+    type: String,
+    default: '/'
+  }
 });
+
+let formData = reactive({});
+const handleSubmit = async () => {
+  if (props.id_role !== null) {
+    formData.id_role = props.id_role;
+  }
+  try {
+    const data = apiService.fetchJson(props.route, "http://localhost:5000", props.verb, formData);
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+  await apiService
+
+};
+
 </script>
 
 <style scoped>
