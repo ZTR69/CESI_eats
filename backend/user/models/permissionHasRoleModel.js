@@ -23,16 +23,4 @@ const PermissionsHasRole = sequelize.define('perm_role', {
     freezeTableName: true
 });
 
-// Define the associations
-Permission.belongsToMany(Role, { 
-    through: PermissionsHasRole,
-    foreignKey: 'perm_id',
-    otherKey: 'role_id'
-});
-Role.belongsToMany(Permission, { 
-    through: PermissionsHasRole,
-    foreignKey: 'role_id',
-    otherKey: 'perm_id'
-});
-
 module.exports = PermissionsHasRole;
