@@ -21,9 +21,9 @@
               <img src="../assets/img/cart.png" alt="cart">
             </a>
 
-            <a v-if="isConnected" href="#">
+            <router-link v-if="isConnected" :to="{ name: 'profile', query: { getParam: 'info' } }">
               <img src="../assets/img/profil.png" alt="profile">
-            </a>
+            </router-link>
 
             <div v-else class="d-none d-sm-block">
               <router-link v-if="!hideButton" to="/signup">
