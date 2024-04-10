@@ -8,7 +8,8 @@
                     <p class="card-text">Prix : {{ price }} €</p>
                     <button class="btn btn-primary" v-if="showAddToCartButton" @click="addToCart">Ajouter au
                         panier</button>
-                    <button class="btn btn-primary" v-if="showRemoveFromCartButton" @click="emitRemoveFromCart">Retirer du panier</button>
+                    <button class="btn btn-primary" v-if="showRemoveFromCartButton" @click="emitRemoveFromCart">Retirer
+                        du panier</button>
                 </div>
             </div>
         </div>
@@ -42,24 +43,36 @@ export default {
         showRemoveFromCartButton: {
             type: Boolean,
             default: false
-        }
+        },
+        restaurantId: {
+            type: Number,
+            required: true
+        },
         // Rest of the props...
     },
     methods: {
         addToCart() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const restaurantId = this.restaurantId; // Assume this.restaurantId is the ID of the restaurant of the current item
+
+            if (cart.length > 0 && cart[0].restaurantId !== restaurantId) {
+                alert('Vous ne pouvez ajouter que des menus d\'un seul restaurant à la fois.');
+                return;
+            }
+
             cart.push({
                 id: this.id,
                 title: this.title,
                 description: this.description,
-                price: this.price
+                price: this.price,
+                restaurantId: restaurantId
             });
             localStorage.setItem('cart', JSON.stringify(cart));
             console.log('Added to cart:', this.title);
         },
         emitRemoveFromCart() {
-      this.$emit('removeFromCart', this.id);
-    },
+            this.$emit('removeFromCart', this.id);
+        },
     }
 }
 
