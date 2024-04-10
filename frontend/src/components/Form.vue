@@ -41,7 +41,6 @@ const props = defineProps({
 });
 
 let formData = reactive({});
-
 const handleSubmit = async () => {
   if (props.id_role !== null) {
     formData.id_role = props.id_role;
@@ -51,8 +50,11 @@ const handleSubmit = async () => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(formData)
   };
+  const url = "http://localhost:5000" + props.route;
+  console.log("URL: ", url); // Log the URL
+  console.log("Request Options: ", requestOptions); // Log the request options
   try {
-    const response = await fetch(props.route, requestOptions);
+    const response = await fetch(url, requestOptions);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
