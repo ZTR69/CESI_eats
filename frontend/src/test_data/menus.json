@@ -1,0 +1,46 @@
+{
+    "menus": [
+      {
+        "id": 1,
+        "restaurant_id": 1,
+        "title": "Burger",
+        "price": 14.90,
+        "description": "Un délicieux burger avec de la laitue, de la tomate et du fromage"
+      },
+      {
+        "id": 2,
+        "restaurant_id": 1,
+        "title": "Frites",
+        "price": 5.90,
+        "description": "Des frites croustillantes servies avec du ketchup"
+      },
+      {
+        "id": 3,
+        "restaurant_id": 2,
+        "title": "Cheeseburger",
+        "price": 9.90,
+        "description": "Un savoureux cheeseburger avec du fromage fondant"
+      },
+      {
+        "id": 4,
+        "restaurant_id": 2,
+        "title": "Nuggets",
+        "price": 6.50,
+        "description": "Des morceaux de poulet croustillants"
+      },
+      {
+        "id": 5,
+        "restaurant_id": 3,
+        "title": "Bucket",
+        "price": 19.90,
+        "description": "Un seau de poulet frit avec des accompagnements"
+      },
+      {
+        "id": 6,
+        "restaurant_id": 3,
+        "title": "Twister",
+        "price": 8.50,
+        "description": "Un wrap au poulet croustillant et aux légumes frais"
+      }
+    ]
+  }
