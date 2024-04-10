@@ -13,10 +13,6 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
     // Get verb http from request
     const verb = req.method;
 
-    // Define a many-to-many relation between Role and Permission through the "perm_role" table
-    Role.belongsToMany(Permission, { through: 'perm_role', foreignKey: 'role_id_role', as: 'Permissions'});
-    Permission.belongsToMany(Role, { through: 'perm_role', foreignKey: 'permissions_id_permission', as: 'Roles'});
-
     // Check if a role with the provided id_role exists
     const role = await Role.findByPk(id_role);
     if (!role) {

@@ -20,6 +20,9 @@ const Menu = require('./models/menuModel')
 sequelize.sync()
   .then(() => {
     console.log('All tables have been successfully created.');
+    // init restaurant
+    const restaurant = require('./controllers/restaurantController.js')
+    restaurant.initRestaurants()
   })
   .catch(error => console.error('Unable to create tables:', error));
 
@@ -40,10 +43,6 @@ app.use(cors());
 // Routes
 app.use('/api/restaurant', require('./routes/restaurantRoutes'))
 app.use('/api/menu', require('./routes/menuRoutes'))
-
-// init restaurant
-const restaurant = require('./controllers/restaurantController.js')
-restaurant.initRestaurants()
 
 // Launch server
 app.listen(port, () => {

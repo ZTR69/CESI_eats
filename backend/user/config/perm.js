@@ -64,6 +64,10 @@ const initPermissions = asyncHandler( async () => {
       }
     }
   }
+
+  // Define a many-to-many relation between Role and Permission through the "perm_role" table
+  Role.belongsToMany(Permission, { through: 'perm_role', foreignKey: 'role_id_role', as: 'Permissions'});
+  Permission.belongsToMany(Role, { through: 'perm_role', foreignKey: 'permissions_id_permission', as: 'Roles'});
 });
 
 const permTab = {
