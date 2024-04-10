@@ -12,6 +12,23 @@ sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
 
+// Import des modèles
+const User = require('./models/userModel.js')
+const Role = require('./models/roleModel.js')
+const UserRole = require('./models/userRoleModel.js')
+const Permission = require('./models/permissionModel.js')
+const PermissionsHasRole = require('./models/permissionHasRoleModel.js')
+    
+sequelize.sync({ force: true })
+  .then(() => {
+    console.log('All tables have been successfully created.');
+    // Init permissions
+    const perm = require('./config/perm.js')
+    perm.initPermissions()
+  })
+  .catch(error => console.error('Unable to create tables:', error));
+
+
 // Connexion to MongoDB
 const connectDB = require('./config/dbMongo')
 connectDB()
