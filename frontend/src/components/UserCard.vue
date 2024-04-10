@@ -1,44 +1,44 @@
 <template>
-    <div class="custom-card">
-      <div class="card" style="width: 18rem;">
-        <img class="card-img-top" :src="image" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">{{ title }}</h5>
-          <p class="card-text">{{ time }}</p>
-          <a :href="url" class="btn btn-primary">{{ buttonLabel }}</a>
-        </div>
+  <div class="custom-card">
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" :src="image" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{ title }}</h5>
+        <p class="card-text">{{ time }}</p>
+        <router-link :to="'/restaurant/' + id" class="btn btn-primary">Commander</router-link>
       </div>
     </div>
+  </div>
 </template>
-  
-  <script>
-  export default {
-    props: {
-      image: {
-        type: String,
-        required: true
-      },
-      title: {
-        type: String,
-        required: true
-      },
-      time: {
-        type: String,
-        required: true
-      },
-      buttonLabel: {
-        type: String,
-        required: true
-      },
-      url: {
+
+<script>
+export default {
+  props: {
+    id: {
+      type: Number,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    time: {
+      type: String,
+      required: true
+    },
+    url: {
       type: String,
       required: true
     }
-    }
   }
-  </script>
+}
+</script>
  
- <!-- Add "scoped" attribute to limit CSS to this component only : bouton : background: #434343, police : adapte a la taille du boutton ; texte : police :montserrat bold, couleur blan ; image : moins haute sans l'aplatir, rogner ce qui dépasse -->
+ <!-- Add "scoped" attribute to limit CSS to this component only -->
  <style scoped>
  .custom-card {
    margin-top: 20px;
@@ -51,6 +51,7 @@
    border-radius: 5px;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
    margin : 5px;
+   width: 30rem;
  }
  .card-img-top {
     height: 150px;
