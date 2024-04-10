@@ -17,13 +17,13 @@
 
           <div class="d-flex align-items-center">
 
-            <a v-if="showCart" href="#" class="padding-cart">
+            <router-link v-if="isConnected" :to="{ name: 'profile', query: {getParam: 'info'} }">
               <img src="../assets/img/cart.png" alt="cart">
-            </a>
-
-            <router-link v-if="isConnected" :to="{ name: 'profile', query: { getParam: 'info' } }">
-              <img src="../assets/img/profil.png" alt="profile">
             </router-link>
+
+            <a v-if="isConnected" href="#">
+              <img src="../assets/img/profil.png" alt="profile">
+            </a>
 
             <div v-else class="d-none d-sm-block">
               <router-link v-if="!hideButton" to="/signup">
