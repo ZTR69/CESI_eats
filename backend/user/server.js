@@ -16,9 +16,9 @@ sequelize.authenticate()
 const User = require('./models/userModel.js')
 const Role = require('./models/roleModel.js')
 const UserRole = require('./models/userRoleModel.js')
-const Permission = require('./models/permissionModel.js')
 const PermissionsHasRole = require('./models/permissionHasRoleModel.js')
-    
+const Permission = require('./models/permissionModel.js')
+
 sequelize.sync({ force: true })
   .then(() => {
     console.log('All tables have been successfully created.');
