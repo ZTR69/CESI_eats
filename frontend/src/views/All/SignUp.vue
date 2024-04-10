@@ -32,6 +32,6 @@ const myFunction = () => {
 
 <style>
 body {
-  background-color: #FEFFED;
+  background-color: #FEFDFB;
 }
 </style>
