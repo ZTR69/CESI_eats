@@ -38,12 +38,12 @@ h1 {
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
 import UserCard from '@/components/UserCard.vue';
-import sourceData from "@/test_data/restaurants.json";
+import RestaurantData from "@/test_data/restaurants.json";
 
 export default {
   data() {
     return {
-      restaurants: sourceData.restaurants
+      restaurants: RestaurantData.restaurants
     };
   },
   components: {

@@ -1,18 +1,21 @@
 <template>
     <div class="card mb-3">
-      <div class="row no-gutters">
-        <div class="col-md-8">
-          <div class="card-body">
-            <h5 class="card-title">{{ title }}</h5>
-            <p class="card-text">{{ description }}</p>
-            <p class="card-text">Prix : {{ price }} €</p>
-          </div>
+        <div class="row no-gutters">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ title }}</h5>
+                    <p class="card-text">{{ description }}</p>
+                    <p class="card-text">Prix : {{ price }} €</p>
+                    <button class="btn btn-primary" v-if="showAddToCartButton" @click="addToCart">Ajouter au
+                        panier</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </template>
+</template>
 
 <script>
+
 export default {
     props: {
         id: {
@@ -28,11 +31,17 @@ export default {
             required: true
         },
         price: {
-            type: String,
+            type: Number,
             required: true
-        }
-    }
-};
+        },
+        showAddToCartButton: {
+            type: Boolean,
+            default: false
+        },
+        // Rest of the props...
+    },
+}
+
 </script>
 
 <style scoped>

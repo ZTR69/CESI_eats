@@ -32,6 +32,7 @@
                                 :title="menu.title"
                                 :description="menu.description"
                                 :price="menu.price"
+                                :showAddToCartButton="true"
                             />
                             
                     </div>
@@ -61,7 +62,7 @@ export default {
   },
   components: {
     MenuComponent,
-    Na
+    NavigationBar
   }
 };
 </script>
