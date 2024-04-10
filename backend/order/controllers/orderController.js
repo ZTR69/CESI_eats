@@ -61,8 +61,12 @@ const addOrder = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Error no addressDelivery')
     }
+    if (!req.body.prix) {
+        res.status(400)
+        throw new Error('Error no prix')
+    }
     const currentDate = new Date().toISOString()
-    const order = await OrderModel.create({ orderID: new mongoose.Types.ObjectId(), restaurantID: req.body.restaurantID, items: { itemName: req.body.itemName, prix: "10"}, userID: req.body.userID, date: currentDate, addressDelivery: req.body.addressDelivery})
+    const order = await OrderModel.create({ orderID: new mongoose.Types.ObjectId(), restaurantID: req.body.restaurantID, items: { itemName: req.body.itemName, prix: req.body.prix}, userID: req.body.userID, date: currentDate, addressDelivery: req.body.addressDelivery})
     res.json({ message: order })// TO DO retour orderID et itemID
 })
 
