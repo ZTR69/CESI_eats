@@ -10,6 +10,12 @@ import Orders from "@/components/Orders.vue";
 </script>
 
 <style scoped>
+.padding {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-left: 200px;
+}
 
 .info-text {
   font-size: 1.5em;
@@ -18,6 +24,12 @@ import Orders from "@/components/Orders.vue";
 
 .centered-buttons > button {
   margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+  .padding {
+    margin-left: 0;
+  }
 }
 
 </style>

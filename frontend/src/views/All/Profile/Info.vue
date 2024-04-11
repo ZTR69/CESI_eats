@@ -42,7 +42,7 @@ onMounted(async () => {
   email.value = data.email;
   phone.value = data.phone ? data.phone : 'No phone number';
 
-  switch (data.id_user) {
+  switch (data.id_role) {
     case 1:
       role.value = 'Client';
       break;

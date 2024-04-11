@@ -121,7 +121,6 @@ export default {
   setup() {
     let isConnected = ref(!!localStorage.getItem('token'));
     isConnected = isConnected.value;
-    console.log(isConnected);
     return { isConnected };
   },
   methods: {
@@ -160,16 +159,6 @@ button[type="submit"] {
 .padding {
   margin-left: 20px;
   margin-right: 20px;
-}
-
-.big-padding {
-  margin-left: 50px;
-  margin-right: 50px;
-}
-
-.big-padding-2 {
-  margin-left: 80px;
-  margin-right: 80px;
 }
 
 .padding-cart {
