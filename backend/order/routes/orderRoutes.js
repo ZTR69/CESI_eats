@@ -11,13 +11,13 @@ uppdateStatus,
 deleteItem,
 deleteOrder
 } = require('../controllers/orderController')
-router.get('/all', getOrders)
-router.get('/:orderID', getOrder)
-router.get('/restaurant/:restaurantID', getRestaurantOrders)
-router.get('/restaurant/:restaurantID/pending', getRestaurantPendingOrders)
-router.post('/', addOrder)
-router.put('/:orderID/item', addItem)
-router.put('/:orderID/status', uppdateStatus)
-router.delete('/item/:orderID', deleteItem)
-router.delete('/:orderID', deleteOrder)
+router.get('/all', authorization, permMiddleware, logMiddleware, getOrders)
+router.get('/:orderID', authorization, permMiddleware, logMiddleware, getOrder)
+router.get('/restaurant/:restaurantID', authorization, permMiddleware, logMiddleware, getRestaurantOrders)
+router.get('/restaurant/:restaurantID/pending', authorization, permMiddleware, logMiddleware, getRestaurantPendingOrders)
+router.post('/', authorization, permMiddleware, logMiddleware, addOrder)
+router.put('/:orderID/item', authorization, permMiddleware, logMiddleware, addItem)
+router.put('/:orderID/status', authorization, permMiddleware, logMiddleware, uppdateStatus)
+router.delete('/item/:orderID', authorization, permMiddleware, logMiddleware, deleteItem)
+router.delete('/:orderID', authorization, permMiddleware, logMiddleware, deleteOrder)
 module.exports = router

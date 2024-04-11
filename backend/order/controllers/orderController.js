@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const OrderModel = require('../models/orderModel')
+const User = require('../models/userModel')
 
 const getOrder = asyncHandler(async (req, res) => {
     const order = await OrderModel.findOne({ orderID: req.params.orderID })
@@ -53,9 +54,13 @@ const addOrder = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Error no Item')
     }
-    if (!req.body.userID) {
-        res.status(400)
-        throw new Error('Error no User')
+    if (req.user) {
+        const user = await User.findByPk(req.user.id_user);
+
+        if (!user) {
+            res.status(400);
+            throw new Error('User not found');
+        }
     }
     if (!req.body.addressDelivery) {
         res.status(400)
@@ -66,7 +71,7 @@ const addOrder = asyncHandler(async (req, res) => {
         throw new Error('Error no prix')
     }
     const currentDate = new Date().toISOString()
-    const order = await OrderModel.create({ orderID: new mongoose.Types.ObjectId(), restaurantID: req.body.restaurantID, items: { itemName: req.body.itemName, prix: req.body.prix}, userID: req.body.userID, date: currentDate, addressDelivery: req.body.addressDelivery})
+    const order = await OrderModel.create({ orderID: new mongoose.Types.ObjectId(), restaurantID: req.body.restaurantID, items: { itemName: req.body.itemName, prix: req.body.prix}, userID: req.user.id_user, date: currentDate, addressDelivery: req.body.addressDelivery})
     res.json({ message: order })// TO DO retour orderID et itemID
 })
 

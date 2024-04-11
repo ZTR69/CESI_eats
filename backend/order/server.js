@@ -1,13 +1,30 @@
 // Import des modules
 const express = require('express')
 const dotenv = require('dotenv').config()
+const colors = require('colors')
+const cors = require('cors');
+
 const port = process.env.PORT || 5010
 
-// Couleur dans la console
-const colors = require('colors')
+// Connexion à MySQL
+const sequelize = require('./config/dbMysql.js')
+sequelize.authenticate()
+    .then(() => console.log('Connection has been established successfully.'))
+    .catch(error => console.error('Unable to connect to the database:', error));
+
+sequelize.sync({ force: true })
+    .then(() => {
+      console.log('All tables have been successfully created.');
+      // Init permissions
+      const perm = require('./config/perm.js')
+      perm.initPermissions()
+    })
+    .catch(error => console.error('Unable to create tables:', error));
+  
+  
 
 // Connexion à MongoDB
-const connectDB = require('./config/db')
+const connectDB = require('./config/dbMongo')
 connectDB()
 
 // Initialisation d'Express
@@ -16,6 +33,12 @@ const app = express()
 // Accepter les données envoyées par formulaire
 app.use(express.json())
 app.use(express.urlencoded())
+
+// Accepter les données envoyées par formulaire
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+// Utilisation du middleware CORS
+app.use(cors());
 
 // Routes
 app.use('/api/order', require('./routes/orderRoutes'))
