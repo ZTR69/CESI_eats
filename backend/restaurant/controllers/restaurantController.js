@@ -1,6 +1,29 @@
 const asyncHandler = require('express-async-handler')
 const Restaurant = require('../models/restaurantModel')
 
+/**
+ * @swagger
+ * /createRestaurant:
+ *   post:
+ *     summary: Create a restaurant
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateRestaurantPayload'
+ *     responses:
+ *       201:
+ *         description: Restaurant created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Restaurant'
+ *       400:
+ *         description: Invalid restaurant data or restaurant already exists
+ *       500:
+ *         description: Internal server error
+ */
 const createRestaurant = asyncHandler(async (req, res) => {
     const { Name, Note, Adress, Image } = req.body;
     const user_id_user = req.user.id_user;
@@ -34,11 +57,53 @@ const createRestaurant = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /getRestaurants:
+ *   get:
+ *     summary: Get all restaurants
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Restaurant'
+ *       500:
+ *         description: Internal server error
+ */
 const getRestaurants = asyncHandler(async (req, res) => {
     const restaurants = await Restaurant.findAll()
     res.json(restaurants)
 });
 
+/**
+ * @swagger
+ * /getRestaurantById:
+ *   get:
+ *     summary: Get a restaurant by ID
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Restaurant'
+ *       401:
+ *         description: Unauthorized - User is not the owner of the restaurant
+ *       404:
+ *         description: Restaurant not found
+ *       500:
+ *         description: Internal server error
+ */
 const getRestaurantById = asyncHandler(async (req, res) => {
     const restaurant = await Restaurant.findByPk(req.query.id)
 
@@ -56,6 +121,37 @@ const getRestaurantById = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /updateRestaurant:
+ *   put:
+ *     summary: Update a restaurant
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateRestaurantPayload'
+ *     responses:
+ *       200:
+ *         description: Restaurant updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Restaurant'
+ *       401:
+ *         description: Unauthorized - User is not the owner of the restaurant
+ *       404:
+ *         description: Restaurant not found
+ *       500:
+ *         description: Internal server error
+ */
 const updateRestaurant = asyncHandler(async (req, res) => {
     const { Name, Note, Adress } = req.body
     const restaurant = await Restaurant.findByPk(req.query.id)
@@ -77,6 +173,35 @@ const updateRestaurant = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /deleteRestaurant:
+ *   delete:
+ *     summary: Delete a restaurant
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Restaurant deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *       401:
+ *         description: Unauthorized - User is not the owner of the restaurant
+ *       404:
+ *         description: Restaurant not found
+ *       500:
+ *         description: Internal server error
+ */
 const deleteRestaurant = asyncHandler(async (req, res) => {
     const restaurant = await Restaurant.findByPk(req.query.id)
     // Check if the user is the owner of the restaurant

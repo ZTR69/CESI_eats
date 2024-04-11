@@ -13,6 +13,29 @@ Article.belongsToMany(Menu, {
     foreignKey: 'Article_id_article' 
 });
 
+/**
+ * @swagger
+ * /createMenuWithArticles:
+ *   post:
+ *     summary: Create a menu with articles
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateMenuWithArticlesPayload'
+ *     responses:
+ *       201:
+ *         description: Menu created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MenuWithArticles'
+ *       400:
+ *         description: Invalid menu data
+ *       500:
+ *         description: Internal server error
+ */
 const createMenuWithArticles = asyncHandler(async (req, res) => {
     const { Name, Description, Price, Restaurants_id_restaurant, articles, Image } = req.body;
     const menu = await Menu.create({
@@ -45,11 +68,51 @@ const createMenuWithArticles = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /getMenus:
+ *   get:
+ *     summary: Get all menus with articles
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/MenuWithArticles'
+ *       500:
+ *         description: Internal server error
+ */
 const getMenus = asyncHandler(async (req, res) => {
     const menusWithArticles = await Menu.findAll({ include: Article });
     res.json(menusWithArticles)
 });
 
+/**
+ * @swagger
+ * /getMenuById:
+ *   get:
+ *     summary: Get a menu by ID with articles
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MenuWithArticles'
+ *       404:
+ *         description: Menu not found
+ *       500:
+ *         description: Internal server error
+ */
 const getMenuById = asyncHandler(async (req, res) => {
     const menu = await Menu.findByPk(req.query.id, { include: Article });
     if (menu) {
@@ -60,6 +123,35 @@ const getMenuById = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /updateMenu:
+ *   put:
+ *     summary: Update a menu with articles
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateMenuPayload'
+ *     responses:
+ *       200:
+ *         description: Menu updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MenuWithArticles'
+ *       404:
+ *         description: Menu not found
+ *       500:
+ *         description: Internal server error
+ */
 const updateMenu = asyncHandler(async (req, res) => {
     const { Name, Description, Price, Restaurants_id_restaurant, articles, Image } = req.body;
     const menu = await Menu.findByPk(req.query.id, { include: Article });
@@ -94,6 +186,33 @@ const updateMenu = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /deleteMenu:
+ *   delete:
+ *     summary: Delete a menu
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Menu deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *       404:
+ *         description: Menu not found
+ *       500:
+ *         description: Internal server error
+ */
 const deleteMenu = asyncHandler(async (req, res) => {
     const menu = await Menu.findByPk(req.query.id)
     if (menu) {

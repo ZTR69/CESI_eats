@@ -13,7 +13,7 @@ import confidentialityImg from '@/assets/img/confidentiality.png';
 </script>
 
 <template>
-  <NavigationBar :is-connected="false" :showSearchBar="false" :show-cart="true" :showAddress="false"  :hide-button="true" :hide-toggle="true"/>
+  <NavigationBar :showSearchBar="false" :show-cart="true" :showAddress="false"  :hide-button="true" :hide-toggle="true"/>
 
   <SideBar :items="[
   ['Informations relatives au compte', 'info', infoImg],

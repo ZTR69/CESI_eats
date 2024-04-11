@@ -14,10 +14,10 @@ class ApiService {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            if (!data.token) {
-                throw new Error(`Token not found in response!`);
+            if (data.token)  {
+                localStorage.setItem('token', data.token);
             }
-            localStorage.setItem('token', data.token);
+
             alert("succès")
             return data;
         } catch (error) {
@@ -45,8 +45,7 @@ class ApiService {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json();
-                return data;
+                return await response.json();
             } catch (error) {
                 console.error(error);
                 alert("echec");

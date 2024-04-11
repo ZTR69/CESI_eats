@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false" />
+    <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false" />
     <div class="centered">
       <h1 style="margin-bottom: 30px">Recevez vos repas et délices favoris, directement à votre porte.</h1>
       <form @submit.prevent="saveAddress">
