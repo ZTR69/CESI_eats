@@ -278,7 +278,8 @@ const getMe = asyncHandler(async (req, res) => {
             address: user.address,
             phone: user.phone,
             sponsorshipCode: user.sponsorship_code,
-            token: req.headers.authorization
+            token: req.headers.authorization,
+            id_role: req.user.id_role
         });
     } else {
         res.status(404);
