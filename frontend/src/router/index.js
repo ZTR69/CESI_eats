@@ -9,6 +9,7 @@ const routes = [
   { path: '/profile', name:'profile', component: () => import('../views/All/Profile/Profile.vue')},
   { path: '/cart', name:'cart', component: () => import('../views/Clients/Cart.vue')},
   { path: '/order-list', name:'OrderList', component: () => import('../views/Delivery/OrderList.vue')},
+  { path: '/restaurant-home', name:'OrderListRestorer', component: () => import('../views/Restorers/Home.vue')},
 ]
 
 const router = createRouter({
