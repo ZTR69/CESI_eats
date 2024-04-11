@@ -32,6 +32,7 @@
                                 :title="menu.title"
                                 :description="menu.description"
                                 :price="menu.price"
+                                :restaurantId="restaurantId"
                                 :showAddToCartButton="true"
                             />
                             

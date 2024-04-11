@@ -8,6 +8,7 @@ const routes = [
   { path: '/signup', name:'signup', component: () => import('../views/All/SignUp.vue')},
   { path: '/profile', name:'Profile', component: () => import('../views/All/Profile/Profile.vue')},
   { path: '/cart', name:'cart', component: () => import('../views/Clients/Cart.vue')},
+  { path: '/order-list', name:'OrderList', component: () => import('../views/Delivery/OrderList.vue')},
 ]
 
 const router = createRouter({

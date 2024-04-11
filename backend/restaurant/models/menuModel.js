@@ -24,7 +24,7 @@ const Menu = sequelize.define('Menu', {
         allowNull: false
     },
     Image: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.TEXT,
         allowNull: false
     }
 }, {
