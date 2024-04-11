@@ -59,7 +59,7 @@ const Role = require('../models/roleModel')
 const registerUser = asyncHandler(async (req, res) => {
     try {
         // Retrieving body informations.
-        const { username, email, password, address, phone, rib, id_role, friend_code} = req.body
+        const { username, email, password, address, phone, rib, id_role, friend_code } = req.body
         // Check if the email is in the correct format
         const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/
         if (!emailRegex.test(email)) {
@@ -71,7 +71,7 @@ const registerUser = asyncHandler(async (req, res) => {
             res.status(400)
             throw new Error('Please add all fields')
         }
-        
+
         // Check if user already exists
         const userExists = await User.findOne({ where: { email } });
 
@@ -232,8 +232,9 @@ const generateToken = (id_user, id_role) => {
     return jwt.sign(
         { id_user: id_user, id_role: id_role },
         process.env.JWT_SECRET,
-        { expiresIn: '15min' }  // Token expires in 30 days
-)};
+        { expiresIn: '1d' }  // Token expires in 30 days
+    )
+};
 
 /**
  * @swagger
@@ -256,7 +257,6 @@ const generateToken = (id_user, id_role) => {
  *                   type: string
  *                 email:
  *                   type: string
- *                 // Add other user properties here
  *       404:
  *         description: The user was not found.
  *       500:
@@ -456,7 +456,7 @@ const getMeCommercial = asyncHandler(async (req, res) => {
         });
 
         // Send the user's roles
-        res.json({ 
+        res.json({
             id_user: id,
             username,
             email,
@@ -464,7 +464,7 @@ const getMeCommercial = asyncHandler(async (req, res) => {
             phone,
             rib,
             roles
-         });
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
