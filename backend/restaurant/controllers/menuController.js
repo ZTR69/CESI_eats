@@ -3,14 +3,14 @@ const Menu = require('../models/menuModel');
 const Article = require('../models/articleModel');
 const Menu_has_article = require('../models/menuHasArticles');
 
-Menu.belongsToMany(Article, { 
-    through: Menu_has_article, 
-    foreignKey: 'Menu_id_menu' 
+Menu.belongsToMany(Article, {
+    through: Menu_has_article,
+    foreignKey: 'Menu_id_menu'
 });
 
-Article.belongsToMany(Menu, { 
-    through: Menu_has_article, 
-    foreignKey: 'Article_id_article' 
+Article.belongsToMany(Menu, {
+    through: Menu_has_article,
+    foreignKey: 'Article_id_article'
 });
 
 /**
