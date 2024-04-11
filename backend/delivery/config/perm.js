@@ -1,21 +1,21 @@
 const permTab = {
     '/all': {
-        'GET': ['readOrder','all']
+        'GET': ['readDelivery','all']
     },
     '/:orderID': {
-        'GET': ['readOrder','all']
+        'GET': ['readDelivery','all']
     },
     '/deliveryMan/:deliveryManID': {
-        'GET': ['readOrder','all']
+        'GET': ['readDelivery','all']
     },
-    '//deliveryMan/:deliveryManID/pending': {
-        'GET': ['readOrder','all']
+    '/deliveryMan/:deliveryManID/cooking': {
+        'GET': ['readDelivery','all']
     },
     '/': {
-        'POST': ['addOrder','all']
+        'POST': ['addDelivery','all']
     },
     '/:orderID/status': {
-        'PUT': ['addOrder','all']
+        'PUT': ['updateSatusDelivery','all']
     },
     '/:orderID/deliveryManID': {
         'PUT': ['updateSatusOrder','all']
