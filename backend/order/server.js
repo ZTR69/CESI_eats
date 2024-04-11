@@ -15,9 +15,6 @@ sequelize.authenticate()
 sequelize.sync({ force: true })
     .then(() => {
       console.log('All tables have been successfully created.');
-      // Init permissions
-      const perm = require('./config/perm.js')
-      perm.initPermissions()
     })
     .catch(error => console.error('Unable to create tables:', error));
   

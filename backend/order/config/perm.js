@@ -1,42 +1,31 @@
-// Tab with all permissions associate to url
-const asyncHandler = require('express-async-handler');
-const Role = require('../models/roleModel');
-const Permission = require('../models/permissionModel');
-const PermissionsHasRole = require('../models/permissionHasRoleModel');
-const User = require('../models/userModel');
-const UserRoles = require('../models/userRoleModel');
-
 const permTab = {
-    '/register': {
-        'POST': ['write']
+    '/all': {
+        'GET': ['readOrder','all']
     },
-    '/login': {
-        'POST': ['write']
+    '/:orderID': {
+        'GET': ['readOrder','all']
     },
-    '/getMe': {
-        'GET': ['read']
+    '/restaurant/:restaurantID': {
+        'GET': ['readOrder','all']
     },
-    '/update': {
-        'PUT': ['write']
+    '/restaurant/:restaurantID/pending': {
+        'GET': ['readOrder','all']
     },
-    '/delete': {
-        'DELETE': ['delete']
+    '/': {
+        'POST': ['addOrder','all']
     },
-    '/getMeCommercial': {
-        'GET': ['read_all_clients']
+    '/:orderID/item': {
+        'PUT': ['addOrder','all']
     },
-    '/updateCommercial': {
-        'PUT': ['write_all_clients']
+    '/:orderID/status': {
+        'PUT': ['updateSatusOrder','all']
     },
-    '/deleteCommercial': {
-        'DELETE': ['delete_all_clients']
+    '/item/:orderID': {
+        'DELETE': ['deleteOrder','all']
     },
-    '/suspendCommercial': {
-        'PUT': ['suspend_all_clients']
-    },
-    '/unsuspendCommercial': {
-        'PUT': ['unsuspend_all_clients']
+    '/:orderID': {
+        'DELETE': ['deleteOrder','all']
     }
 };
 
-module.exports = { permTab, initPermissions };
+module.exports = { permTab};

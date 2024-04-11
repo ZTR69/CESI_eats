@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const { permTab } = require('../config/perm');
 const Role = require('../models/roleModel');
 const Permission = require('../models/permissionModel');
+const PermissionsHasRole = require('../models/permissionHasRoleModel');
 
 const permMiddleware = asyncHandler(async (req, res, next) => {
   try {
@@ -12,6 +13,10 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
     console.log('connected in permmiddleWare : ' + id + id_role);
     // Get verb http from request
     const verb = req.method;
+
+    // Define a many-to-many relation between Role and Permission through the "perm_role" table
+    Permission.belongsToMany(Role, { through: 'perm_role', foreignKey: 'permissions_id_permission'});
+    Role.belongsToMany(Permission, { through: 'perm_role', foreignKey: 'role_id_role'});
 
     // Check if a role with the provided id_role exists
     const role = await Role.findByPk(id_role);
@@ -24,7 +29,10 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
     const roleWithPermissions = await Role.findByPk(id_role, {
       include: [{
         model: Permission,
-        as: 'Permissions', // Use the same case as the association alias
+        through: {
+          model: PermissionsHasRole,
+          attributes: [],  // This will skip the perm_role table's properties in the returned data
+        },
       }]
     });
 

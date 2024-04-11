@@ -1,5 +1,9 @@
 const express = require('express')
 const router = express.Router()
+const { authorization } = require('../middlewares/authMiddleware')
+const { logMiddleware } = require('../middlewares/logMiddleware')
+const { permMiddleware } = require('../middlewares/permMiddleware')
+
 const {
 getOrder,
 getOrders,
