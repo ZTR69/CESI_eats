@@ -15,11 +15,11 @@ uppdateDeliveryMan,
 deleteDelivery
 } = require('../controllers/deliveryController')
 router.get('/all', authorization, permMiddleware, logMiddleware, getDeliveries)
-router.get('/:orderID', authorization, permMiddleware, logMiddleware, getDelivery)
-router.get('/deliveryMan/:deliveryManID', authorization, permMiddleware, logMiddleware, getDeliveryManDeliveries)
-router.get('/deliveryMan/:deliveryManID/cooking', authorization, permMiddleware, logMiddleware, getDeliveryManCookingDelivery)
+router.get('/', authorization, permMiddleware, logMiddleware, getDelivery)
+router.get('/deliveryMan/', authorization, permMiddleware, logMiddleware, getDeliveryManDeliveries)
+router.get('/deliveryMan/cooking/', authorization, permMiddleware, logMiddleware, getDeliveryManCookingDelivery)
 router.post('/', authorization, permMiddleware, logMiddleware, addDelivery)
-router.put('/:orderID/status', authorization, permMiddleware, logMiddleware, uppdateStatus)
-router.put('/:orderID/deliveryManID', authorization, permMiddleware, logMiddleware, uppdateDeliveryMan)
-router.delete('/:orderID', authorization, permMiddleware, logMiddleware, deleteDelivery)
+router.put('/status/', authorization, permMiddleware, logMiddleware, uppdateStatus)
+router.put('/deliveryManID/', authorization, permMiddleware, logMiddleware, uppdateDeliveryMan)
+router.delete('/', authorization, permMiddleware, logMiddleware, deleteDelivery)
 module.exports = router
