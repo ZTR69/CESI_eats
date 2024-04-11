@@ -3,6 +3,8 @@ const express = require('express')
 const dotenv = require('dotenv').config()
 const colors = require('colors')
 const cors = require('cors');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 // Definition du port
 const port = process.env.PORT || 5001
@@ -43,6 +45,23 @@ app.use(cors());
 // Routes
 app.use('/api/restaurant', require('./routes/restaurantRoutes'))
 app.use('/api/menu', require('./routes/menuRoutes'))
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API Cesi_eats',
+      version: '1.0.0',
+      description: 'A simple Express API',
+    },
+  },
+  apis: ['./controllers/*.js'], 
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/restaurants/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// Console log path swagger
+console.log('Swagger running on http://localhost:5001/restaurants/api-docs/')
 
 // Launch server
 app.listen(port, () => {
