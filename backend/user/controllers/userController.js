@@ -124,6 +124,8 @@ const getMe = asyncHandler(async (req, res) => {
             id_user: user.id_user,
             name: user.username,
             email: user.email,
+            address: user.address,
+            phone: user.phone,
             sponsorshipCode: user.sponsorship_code,
             token: req.headers.authorization
         });
