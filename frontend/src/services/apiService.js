@@ -28,7 +28,7 @@ class ApiService {
         }
     }
 
-    async fetchJsonWithToken(route, base_url, verb, formData) {
+    async fetchJsonWithToken(route, base_url, verb, formData, param) {
         const requestOptions = {
             method: verb.toUpperCase(),
             headers: {
@@ -40,6 +40,9 @@ class ApiService {
                 requestOptions.body = JSON.stringify(formData);
             }
             const url = base_url + route;
+            if (param) {
+                url += '?id=' + encodeURIComponent(param);
+            }
             try {
                 const response = await fetch(url, requestOptions);
                 if (!response.ok) {
