@@ -44,7 +44,10 @@ const initPermissions = asyncHandler( async () => {
     { name: 'addOrder', description: 'add an order' },
     { name: 'deleteOrder', description: 'Delete an order' },
     { name: 'readOrder', description: 'Read an order' },
-    { name: 'updateSatusOrder', description: 'Update the status of an order' }
+    { name: 'updateSatusOrder', description: 'Update the status of an order' },
+    { name: 'addDelivery', description: 'add an order' },
+    { name: 'deleteDelivery', description: 'Delete an order' },
+    { name: 'readDelivery', description: 'Read an order' }
   ]);
 
   // Insertion des permissions pour chaque rôle
