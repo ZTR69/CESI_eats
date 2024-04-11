@@ -8,6 +8,7 @@ const cors = require('cors');
 const port = process.env.PORT || 5020
 
 // Connexion à MySQL
+const sequelize = require('./config/dbMysql.js')
 sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
