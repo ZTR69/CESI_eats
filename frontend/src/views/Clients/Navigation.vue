@@ -2,16 +2,15 @@
     <div>
       <NavigationBar />
       <h1>Liste des restaurants</h1>
+      <p> {{ restaurants }}</p>
       <div class="card-grid"> 
         <UserCard
           v-for="restaurant in restaurants"
-          :key="restaurant.id"
-          :id="restaurant.id"
-          :image="restaurant.image"
-          :title="restaurant.title"
-          :time="restaurant.time"
-          :address="restaurant.address"
-          :url="restaurant.url"
+          :key="restaurant.id_restaurant"
+          :id="restaurant.id_restaurant"
+          :image="restaurant.Image"
+          :title="restaurant.Name"
+          :address="restaurant.Adress"
         />
       </div>
     </div>
@@ -21,16 +20,21 @@
 import NavigationBar from "@/components/NavigationBar.vue";
 import UserCard from '@/components/UserCard.vue';
 import RestaurantData from "@/test_data/restaurants.json";
+import apiService from "@/services/apiService.js";
 
 export default {
   data() {
     return {
-      restaurants: RestaurantData.restaurants
+      restaurants: []
     };
   },
   components: {
     NavigationBar,
     UserCard
   },
+  async mounted() {
+    const response = await apiService.fetchJsonWithToken('/api/restaurant/get', 'http://localhost:5005', 'GET');
+    this.restaurants = response;
+  }
 };
 </script>
