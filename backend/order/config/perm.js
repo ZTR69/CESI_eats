@@ -2,28 +2,28 @@ const permTab = {
     '/all': {
         'GET': ['readOrder','all']
     },
-    '/:orderID': {
+    '/': {
         'GET': ['readOrder','all']
     },
-    '/restaurant/:restaurantID': {
+    '/restaurant/': {
         'GET': ['readOrder','all']
     },
-    '/restaurant/:restaurantID/pending': {
+    '/restaurant/pending': {
         'GET': ['readOrder','all']
     },
     '/': {
         'POST': ['addOrder','all']
     },
-    '/:orderID/item': {
+    '/item': {
         'PUT': ['addOrder','all']
     },
-    '/:orderID/status': {
+    '/status': {
         'PUT': ['updateSatusOrder','all']
     },
-    '/item/:orderID': {
+    '/item': {
         'DELETE': ['deleteOrder','all']
     },
-    '/:orderID': {
+    '/': {
         'DELETE': ['deleteOrder','all']
     }
 };
