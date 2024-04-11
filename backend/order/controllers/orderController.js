@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler')
 const OrderModel = require('../models/orderModel')
 
 const getOrder = asyncHandler(async (req, res) => {
-    const order = await OrderModel.findOne({ orderID: req.params.orderID })
+    const order = await OrderModel.findOne({ orderID: req.query.orderID })
     if (!order) {
         res.status(400)
         throw new Error('Order not found')
@@ -16,7 +16,7 @@ const getOrders = asyncHandler(async (req, res) => {
 })
 
 const getRestaurantOrders = asyncHandler(async (req, res) => {
-    const orders = await OrderModel.find({ restaurantID: req.params.restaurantID })
+    const orders = await OrderModel.find({ restaurantID: req.query.restaurantID })
     if (!orders) {
         res.status(400)
         throw new Error('Orders not found')
@@ -25,7 +25,7 @@ const getRestaurantOrders = asyncHandler(async (req, res) => {
 })
 
 const getRestaurantPendingOrders = asyncHandler(async (req, res) => {
-    const orders = await OrderModel.find({ restaurantID: req.params.restaurantID, status: 'pending'})
+    const orders = await OrderModel.find({ restaurantID: req.query.restaurantID, status: 'pending'})
     if (!orders) {
         res.status(400)
         throw new Error('Orders not found')
@@ -34,12 +34,12 @@ const getRestaurantPendingOrders = asyncHandler(async (req, res) => {
 })
 
 const uppdateStatus = asyncHandler(async (req, res) => {
-    const order = await OrderModel.findOne({ orderID: req.params.orderID })
+    const order = await OrderModel.findOne({ orderID: req.query.orderID })
     if (!order) {
         res.status(400)
         throw new Error('Order not found')
     }
-    const updatedOrder = await OrderModel.findOneAndUpdate({orderID: req.params.orderID},
+    const updatedOrder = await OrderModel.findOneAndUpdate({orderID: req.query.orderID},
         { status: req.body.status }, { new: true })
     res.status(200).json(updatedOrder)
 })
@@ -69,22 +69,22 @@ const addOrder = asyncHandler(async (req, res) => {
 })
 
 const deleteOrder = asyncHandler(async (req, res) => {
-    const order = await OrderModel.findOne({ orderID: req.params.orderID })
+    const order = await OrderModel.findOne({ orderID: req.query.orderID })
     if (!order) {
         res.status(400)
         throw new Error('Order not found')
     }
-    const deletedOrder = await OrderModel.findOneAndDelete(req.params.orderID)
+    const deletedOrder = await OrderModel.findOneAndDelete(req.query.orderID)
     res.status(200).json(deletedOrder)
 })
 
 const deleteItem = asyncHandler(async (req, res) => {
-    const order = await OrderModel.findOne({ orderID: req.params.orderID })
+    const order = await OrderModel.findOne({ orderID: req.query.orderID })
     if (!order) {
         res.status(400)
         throw new Error('Order not found')
     }
-    const deleteItem = await OrderModel.findOneAndUpdate({orderID: req.params.orderID},
+    const deleteItem = await OrderModel.findOneAndUpdate({orderID: req.query.orderID},
         { $pull: { items: { _id: req.body.itemID} } }, { new: true })
     res.status(200).json(deleteItem)
 })
