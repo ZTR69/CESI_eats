@@ -44,42 +44,28 @@ const uppdateStatus = asyncHandler(async (req, res) => {
     res.status(200).json(updatedOrder)
 })
 
-const addOrder = asyncHandler(async (req, res) => {
-    if (!req.body.restaurantID) {
-        res.status(400)
-        throw new Error('Error no Restaurant')
-    }
-    if (!req.body.itemName) {
-        res.status(400)
-        throw new Error('Error no Item')
-    }
-    if (!req.user) { 
-        res.status(400);
-        throw new Error('User not found');
-    }
-    if (!req.body.addressDelivery) {
-        res.status(400)
-        throw new Error('Error no addressDelivery')
-    }
-    if (!req.body.prix) {
-        res.status(400)
-        throw new Error('Error no prix')
-    }
-    const currentDate = new Date().toISOString()
-    const order = await OrderModel.create({ orderID: new mongoose.Types.ObjectId(), restaurantID: req.body.restaurantID, items: { itemName: req.body.itemName, prix: req.body.prix}, userID: req.user.id_user, date: currentDate, addressDelivery: req.body.addressDelivery})
-    res.json({ message: order })// TO DO retour orderID et itemID
-})
-
-const addItem = asyncHandler(async (req, res) => {
-    const order = await OrderModel.findOne({ orderID: req.params.orderID })
+const addItem = asyncHandler(async (req, res, orderId) => {
+    const order = await OrderModel.findOne({ orderID: orderId })
     if (!order) {
         res.status(400)
         throw new Error('Order not found')
     }
-    const newItem = JSON.parse(req.body.newItem)
-    const updatedOrder = await OrderModel.findOneAndUpdate({orderID: req.params.orderID},
-        { $push: { items: newItem } }, { new: true })
-    res.status(200).json(updatedOrder) // TO DO retour itemID
+    const updatedOrder = await OrderModel.findOneAndUpdate({orderID: orderId},
+        { $push: { items: {"itemName": req.title,"prix": req.price} } }, { new: true })
+})
+
+const addOrder = asyncHandler(async (req, res) => {
+    
+    if (!req.body.items || !Array.isArray(req.body.items)) {
+        res.status(400)
+        throw new Error('Items not provided or not an array')
+    }
+    const currentDate = new Date().toISOString()
+    req.body.items[0]
+    const order = await OrderModel.create({ orderID: new mongoose.Types.ObjectId(), restaurantID: req.body.items[0].restaurantId, userID: req.user.id_user, date: currentDate, addressDelivery: req.body.items[0].userAddress, addressRestaurant: req.body.items[0].restaurantAddress})
+    
+    req.body.items.forEach(async (item) => { await addItem(item, res, order.orderID) })
+    res.json({ message: order.orderID })
 })
 
 const deleteOrder = asyncHandler(async (req, res) => {

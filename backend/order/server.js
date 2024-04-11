@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors());
 
 // Routes
-app.use('/api/order', require('./routes/orderRoutes'))
+app.use('/api/orders', require('./routes/orderRoutes'))
 
 // Lancement du serveur
 app.listen(port, () => {
