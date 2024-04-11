@@ -1,5 +1,5 @@
 <template>
-    <NavigationBar />
+    <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="true"  :hide-button="true"/>
     <div class="cart">
       <h1>Votre panier :</h1>
       <MenuComponent
@@ -10,11 +10,12 @@
         :description="item.description"
         :price="item.price"
         :restaurantId="item.id"
+        :restaurantAddress="item.restaurantAddress"
         :showAddToCartButton="false"
         :showRemoveFromCartButton="true"
         @removeFromCart="removeFromCart"
       />
-      <div class="total-and-order-button">
+        <div class="total-and-order-button">
         <h1>Prix total : {{ total }} €</h1>
         <button class="btn btn-primary" @click="showOrderForm = true">Valider la commande</button>
             </div>
@@ -38,6 +39,7 @@
                         <input v-model="paymentInfo.cvv" required>
                     </label>
                     <button type="submit">Confirmer la commande</button>
+                    <p> {{this.items}} </p>
                 </form>
             </div>
             <div v-if="showModal" class="order-confirmation">
@@ -86,7 +88,7 @@ export default {
             this.items = cart;
         },
         placeOrder() {
-                console.log('Order placed');
+                console.log('Order placed', this.items);
                 console.log('Payment Info:', this.paymentInfo);
                 this.showModal = true;
                 this.showOrderForm = false;

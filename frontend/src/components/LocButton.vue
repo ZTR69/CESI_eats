@@ -1,5 +1,5 @@
 <template>
-  <button class="loc-button">
+  <button class="loc-button" @click="$emit('edit')">
     <img src="../assets/img/loc.png" alt="Location Icon">
     <span class="address d-none d-sm-inline">{{ address }}</span>
     <span class="address d-inline d-sm-none">{{ shortAddress }}</span>
