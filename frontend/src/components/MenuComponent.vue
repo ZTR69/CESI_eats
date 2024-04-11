@@ -70,7 +70,8 @@ export default {
                 description: this.description,
                 price: this.price,
                 restaurantId: restaurantId,
-                restaurantAddress: this.restaurantAddress
+                restaurantAddress: this.restaurantAddress,
+                userAddress: localStorage.getItem('userAddress')
             });
             localStorage.setItem('cart', JSON.stringify(cart));
             console.log('Added to cart:', this.title);
