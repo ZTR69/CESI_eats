@@ -46,7 +46,9 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
     console.log('permNames : ' + permissionNames);
 
     // Get permission from permission table
+    console.log('req.path : ' + req.path + ' verb : ' + verb);
     const permissionTab = permTab[req.path][verb][0];
+
 
     console.log('sql perm : ' + permissionNames);
     console.log('permTab : ' + permissionTab);
