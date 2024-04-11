@@ -1,5 +1,5 @@
 <template>
-  <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
+  <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
   <Form :items="formData" :title="`Création d'un compte ${accountType}`" :id_role="id_role" verb="post" route="/api/users/register"/>
 </template>
 

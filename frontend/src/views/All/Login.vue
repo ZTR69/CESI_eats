@@ -1,5 +1,5 @@
 <template>
-  <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
+  <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
   <Form :items="[['Adresse mail','email'], ['Mot de passe', 'password']]" title="Connexion" verb="post" route="/api/users/login"/>
 </template>
 

@@ -93,7 +93,7 @@ import 'bootstrap';
 import CustomButton from '@/components/CustomButton.vue';
 import SearchBar from "@/components/SearchBar.vue";
 import LocButton from "@/components/LocButton.vue";
-import router from '@/router';
+import {ref} from "vue";
 
 export default {
   data() {
@@ -107,50 +107,30 @@ export default {
     this.address = localStorage.getItem('userAddress');
   },
   components: {
-    LocButton,
+    CustomButton,
     SearchBar,
-    CustomButton
+    LocButton
   },
   props: {
-    isConnected: {
-      type: Boolean,
-      default: false
-    },
-    showSearchBar: {
-      type: Boolean,
-      default: true
-    },
-    showAddress: {
-      type: Boolean,
-      default: true
-    },
-    showCart: {
-      type: Boolean,
-      default: true
-    },
-    hideButton: {
-      type: Boolean,
-      default: false
-    },
-    hideToggle: {
-      type: Boolean,
-      default: false
-    }
+    showSearchBar: Boolean,
+    showAddress: Boolean,
+    showCart: Boolean,
+    hideButton: Boolean,
+    hideToggle: Boolean
+  },
+  setup() {
+    let isConnected = ref(!!localStorage.getItem('token'));
+    isConnected = isConnected.value;
+    console.log(isConnected);
+    return { isConnected };
   },
   methods: {
     myFunction() {
-      console.log('Clic !');
-    },
-    updateAddress() {
-      this.address = localStorage.getItem('userAddress');
-    },
-    saveAddress() {
-      localStorage.setItem('userAddress', this.address);
-      console.log('Address saved: ', localStorage.getItem('userAddress'));
-      this.editingAddress = false;
+      console.log("clic");
     }
   }
-};
+}
+
 </script>
 
 <style scoped>
