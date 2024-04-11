@@ -33,10 +33,13 @@ const orderSchema = mongoose.Schema(
         },
         items: {
             type: [itemSchema],
-            required: true,
             default: undefined
         },
         addressDelivery: {
+            type: String,
+            required: true
+        },
+        addressRestaurant: {
             type: String,
             required: true
         },

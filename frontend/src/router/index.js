@@ -10,6 +10,7 @@ const routes = [
   { path: '/cart', name:'cart', component: () => import('../views/Clients/Cart.vue')},
   { path: '/order-list', name:'OrderList', component: () => import('../views/Delivery/OrderList.vue')},
   { path: '/restaurant-home', name:'OrderListRestorer', component: () => import('../views/Restorers/Home.vue')},
+  { path: '/charts', name:'Charts', component: () => import('../views/SalesDepartments/Statistics.vue')},
 ]
 
 const router = createRouter({
