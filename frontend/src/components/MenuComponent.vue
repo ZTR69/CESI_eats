@@ -48,6 +48,10 @@ export default {
             type: Number,
             required: true
         },
+        restaurantAddress: {
+            type: String,
+            required: true
+        },
         // Rest of the props...
     },
     methods: {
@@ -65,7 +69,9 @@ export default {
                 title: this.title,
                 description: this.description,
                 price: this.price,
-                restaurantId: restaurantId
+                restaurantId: restaurantId,
+                restaurantAddress: this.restaurantAddress,
+                userAddress: localStorage.getItem('userAddress')
             });
             localStorage.setItem('cart', JSON.stringify(cart));
             console.log('Added to cart:', this.title);
