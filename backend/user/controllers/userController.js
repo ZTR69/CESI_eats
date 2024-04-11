@@ -232,7 +232,7 @@ const generateToken = (id_user, id_role) => {
     return jwt.sign(
         { id_user: id_user, id_role: id_role },
         process.env.JWT_SECRET,
-        { expiresIn: '15min' }  // Token expires in 30 days
+        { expiresIn: '1d' }  // Token expires in 30 days
 )};
 
 /**
