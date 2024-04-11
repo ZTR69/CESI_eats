@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const { permTab } = require('../config/perm');
 const Role = require('../models/roleModel');
 const Permission = require('../models/permissionModel');
+const PermissionsHasRole = require('../models/permissionHasRoleModel');
 
 const permMiddleware = asyncHandler(async (req, res, next) => {
   try {
@@ -28,6 +29,10 @@ const permMiddleware = asyncHandler(async (req, res, next) => {
     const roleWithPermissions = await Role.findByPk(id_role, {
       include: [{
         model: Permission,
+        through: {
+          model: PermissionsHasRole,
+          attributes: [],  // This will skip the perm_role table's properties in the returned data
+        },
       }]
     });
 
