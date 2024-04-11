@@ -1,5 +1,5 @@
 <template>
-    <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
+    <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
     <div>
         <h1>Order List</h1>
         <div class="card-grid">

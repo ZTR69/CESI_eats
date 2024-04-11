@@ -22,7 +22,10 @@
 <script setup>
 import CustomButton from "@/components/CustomButton.vue";
 import {reactive} from "vue";
-import apiService from "@/services/apiService.js"; // Import apiService
+import apiService from "@/services/apiService.js";
+import {useRouter} from "vue-router"; // Import apiService
+
+const router = useRouter();
 
 const props = defineProps({
   items: Array,
@@ -47,13 +50,12 @@ const handleSubmit = async () => {
     formData.id_role = props.id_role;
   }
   try {
-    const data = apiService.fetchJson(props.route, "http://localhost:5000", props.verb, formData);
+    const data = await apiService.fetchJson(props.route, "http://localhost:5000", props.verb, formData);
     console.log(data);
+    router.push('/');
   } catch (error) {
     console.log(error);
   }
-  await apiService
-
 };
 
 </script>
