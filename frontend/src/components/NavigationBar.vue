@@ -11,8 +11,17 @@
               <img src="../assets/img/logo_big.png" alt="logo_big">
             </router-link>
 
-            <LocButton v-if="showAddress" address="395 rue du colombier" class="d-none d-lg-block" style="margin-left: 30px"/>
-            <SearchBar v-if="showSearchBar" message="Recherchez un restaurant" class="d-none d-lg-block"/>
+            <div v-if="editingAddress">
+              <form @submit.prevent="saveAddress">
+                <input v-model="address" type="text" placeholder="Entrez votre adresse">
+                <button type="submit">Enregistrer</button>
+              </form>
+            </div>
+            <div v-else>
+              <LocButton v-if="showAddress" :address="address" class="d-none d-lg-block" style="margin-left: 30px"
+                @click.native="editingAddress = true" />
+            </div>
+            <SearchBar v-if="showSearchBar" message="Recherchez un restaurant" class="d-none d-lg-block" />
           </div>
 
           <div class="d-flex align-items-center">
@@ -21,7 +30,7 @@
               <img src="../assets/img/cart.png" alt="cart">
             </router-link>
 
-            <router-link v-if="isConnected" :to="{ name: 'profile', query: {getParam: 'info'} }">
+            <router-link v-if="isConnected" :to="{ name: 'profile', query: { getParam: 'info' } }">
               <img src="../assets/img/profil.png" alt="profile">
             </router-link>
 
@@ -34,46 +43,46 @@
               </router-link>
             </div>
 
-            <button v-if="!hideToggle" class="navbar-toggler padding" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLightNavbar" aria-controls="offcanvasLightNavbar" aria-label="Toggle navigation">
+            <button v-if="!hideToggle" class="navbar-toggler padding" type="button" data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasLightNavbar" aria-controls="offcanvasLightNavbar"
+              aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
           </div>
 
-          <div class="offcanvas offcanvas-end text-bg-light" tabindex="-1" id="offcanvasLightNavbar" aria-labelledby="offcanvasLightNavbarLabel">
+          <div class="offcanvas offcanvas-end text-bg-light" tabindex="-1" id="offcanvasLightNavbar"
+            aria-labelledby="offcanvasLightNavbarLabel">
             <div class="offcanvas-header">
-              <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
                 <li v-if="!isConnected && !hideButton" class="nav-item text-center">
                   <router-link to="/signup" style="text-decoration: none">
-                    <CustomButton class="d-block d-sm-none" label="Inscription" width="340px" :handleClick="myFunction" />
+                    <CustomButton class="d-block d-sm-none" label="Inscription" width="340px"
+                      :handleClick="myFunction" />
                   </router-link>
                 </li>
                 <li v-if="!isConnected && !hideButton" class="nav-item text-center" style="margin-bottom: 10px">
                   <router-link to="/login" style="text-decoration: none">
-                    <CustomButton class="d-block d-sm-none" label="Connection" width="340px" :handleClick="myFunction" />
+                    <CustomButton class="d-block d-sm-none" label="Connection" width="340px"
+                      :handleClick="myFunction" />
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link :to="{ name: 'signup', query: { type: 'rest' } }" class="nav-link">Ajouter un restaurant</router-link>
+                  <router-link :to="{ name: 'signup', query: { type: 'rest' } }" class="nav-link">Ajouter un
+                    restaurant</router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link :to="{ name: 'signup', query: { type: 'part' } }" class="nav-link">Devenez coursier-partenaire</router-link>
+                  <router-link :to="{ name: 'signup', query: { type: 'part' } }" class="nav-link">Devenez
+                    coursier-partenaire</router-link>
                 </li>
               </ul>
             </div>
           </div>
         </div>
       </nav>
-    </div>
-
-    <div v-if="showAddress" class="row big-padding-2" >
-      <LocButton address="395 rue du colombier" class="d-block d-lg-none"/>
-    </div>
-
-    <div v-if="showSearchBar" class="row big-padding">
-      <SearchBar class="d-block d-lg-none" placeholder="Rechercher un restaurant"/>
     </div>
   </div>
 
@@ -84,50 +93,65 @@ import 'bootstrap';
 import CustomButton from '@/components/CustomButton.vue';
 import SearchBar from "@/components/SearchBar.vue";
 import LocButton from "@/components/LocButton.vue";
-import router from '@/router';
+import {ref} from "vue";
 
 export default {
+  data() {
+    return {
+      address: '',
+      editingAddress: false
+      // ...
+    };
+  },
+  created() {
+    this.address = localStorage.getItem('userAddress');
+  },
   components: {
-    LocButton,
+    CustomButton,
     SearchBar,
-    CustomButton
+    LocButton
   },
   props: {
-    isConnected: {
-      type: Boolean,
-      default: false
-    },
-    showSearchBar: {
-      type: Boolean,
-      default: true
-    },
-    showAddress: {
-      type: Boolean,
-      default: true
-    },
-    showCart: {
-      type: Boolean,
-      default: true
-    },
-    hideButton: {
-      type: Boolean,
-      default: false
-    },
-    hideToggle:{
-      type: Boolean,
-      default: false
-    }
+    showSearchBar: Boolean,
+    showAddress: Boolean,
+    showCart: Boolean,
+    hideButton: Boolean,
+    hideToggle: Boolean
+  },
+  setup() {
+    let isConnected = ref(!!localStorage.getItem('token'));
+    isConnected = isConnected.value;
+    console.log(isConnected);
+    return { isConnected };
   },
   methods: {
     myFunction() {
-      console.log('Clic !');
+      console.log("clic");
     }
   }
-};
+}
+
 </script>
 
 <style scoped>
+input[type="text"] {
+  width: 200px;
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #333;
+}
 
+button[type="submit"] {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #f1f1f1;
+  color: #333;
+  font-size: 14px;
+}
 .navbar {
   margin-top: 0;
   padding-top: 0;
@@ -153,6 +177,4 @@ export default {
   margin-right: 15px;
   margin-bottom: 5px;
 }
-
-
 </style>

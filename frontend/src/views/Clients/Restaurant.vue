@@ -33,6 +33,7 @@
                                 :description="menu.description"
                                 :price="menu.price"
                                 :restaurantId="restaurantId"
+                                :restaurantAddress="restaurant.address"
                                 :showAddToCartButton="true"
                             />
                             

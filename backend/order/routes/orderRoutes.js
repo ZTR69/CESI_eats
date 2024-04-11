@@ -25,3 +25,4 @@ router.put('/status', authorization, permMiddleware, logMiddleware, uppdateStatu
 router.delete('/item', authorization, permMiddleware, logMiddleware, deleteItem)
 router.delete('/', authorization, permMiddleware, logMiddleware, deleteOrder)
 module.exports = router
+

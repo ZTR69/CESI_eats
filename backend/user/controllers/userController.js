@@ -5,6 +5,57 @@ const User = require('../models/userModel')
 const UserRole = require('../models/userRoleModel')
 const Role = require('../models/roleModel')
 
+/**
+ * @swagger
+ * /api/users/register:
+ *  post:
+ *   summary: Register a new user
+ *  description: Register a new user
+ *  requestBody:
+ *   required: true
+ *  content:
+ *  application/json:
+ *  schema:
+ *  type: object
+ * properties:
+ * username:
+ * type: string
+ * email:
+ * type: string
+ * password:
+ * type: string
+ * address:
+ * type: string
+ * phone:
+ * type: string
+ * rib:
+ * type: string
+ * id_role:
+ * type: integer
+ * friend_code:
+ * type: string
+ * required:
+ * - username
+ * - email
+ * - password
+ * - id_role
+ * responses:
+ * 201:
+ * description: User created successfully
+ * 400:
+ * description: Invalid email format
+ * 400:
+ * description: Please add all fields
+ *  400:
+ * description: User already exists
+ * 500:
+ * description: An error occurred
+ * tags:
+ * - users
+ * security:
+ * - bearerAuth: []
+ * 
+ */
 const registerUser = asyncHandler(async (req, res) => {
     try {
         // Retrieving body informations.
@@ -79,6 +130,40 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Log in a user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The user's email.
+ *               password:
+ *                 type: string
+ *                 description: The user's password.
+ *     responses:
+ *       200:
+ *         description: The user was logged in successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: A JWT for the authenticated user.
+ *       400:
+ *         description: Bad request. User not found or password is wrong.
+ *       500:
+ *         description: There was an error logging in the user.
+ */
 const loginUser = asyncHandler(async (req, res) => {
     // Retrieving body infos.
     const { email, password } = req.body
@@ -103,7 +188,46 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 });
 
-// Generate JWT
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Token:
+ *       type: object
+ *       properties:
+ *         id_user:
+ *           type: integer
+ *           description: The user's id.
+ *         id_role:
+ *           type: integer
+ *           description: The role's id.
+ *       example:
+ *         id_user: 1
+ *         id_role: 2
+ * 
+ * /generateToken:
+ *   post:
+ *     summary: Generate a JWT token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Token'
+ *     responses:
+ *       200:
+ *         description: The token was generated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: A JWT for the authenticated user.
+ *       500:
+ *         description: There was an error generating the token.
+ */
 const generateToken = (id_user, id_role) => {
     return jwt.sign(
         { id_user: id_user, id_role: id_role },
@@ -111,6 +235,33 @@ const generateToken = (id_user, id_role) => {
         { expiresIn: '15min' }  // Token expires in 30 days
 )};
 
+/**
+ * @swagger
+ * /getMe:
+ *   get:
+ *     summary: Get the authenticated user's information
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: The user's information was retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_user:
+ *                   type: integer
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 // Add other user properties here
+ *       404:
+ *         description: The user was not found.
+ *       500:
+ *         description: There was an error retrieving the user's information.
+ */
 const getMe = asyncHandler(async (req, res) => {
     if (req.user) {
         const user = await User.findByPk(req.user.id_user);
@@ -127,7 +278,8 @@ const getMe = asyncHandler(async (req, res) => {
             address: user.address,
             phone: user.phone,
             sponsorshipCode: user.sponsorship_code,
-            token: req.headers.authorization
+            token: req.headers.authorization,
+            id_role: req.user.id_role
         });
     } else {
         res.status(404);
@@ -135,6 +287,40 @@ const getMe = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /updateUser:
+ *   put:
+ *     summary: Update the authenticated user's information
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               rib:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: The user's information was updated successfully.
+ *       404:
+ *         description: The user was not found.
+ *       500:
+ *         description: There was an error updating the user's information.
+ */
 const updateUser = asyncHandler(async (req, res) => {
     try {
         // Get the user id and the new data from the request
@@ -168,6 +354,21 @@ const updateUser = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /deleteUser:
+ *   delete:
+ *     summary: Delete the authenticated user's account
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: The user's account was deleted successfully.
+ *       404:
+ *         description: The user was not found.
+ *       500:
+ *         description: There was an error deleting the user's account.
+ */
 const deleteUser = asyncHandler(async (req, res) => {
     try {
         // Get the user id from the request
@@ -193,6 +394,39 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /getMeCommercial:
+ *   get:
+ *     summary: Get the commercial user's information
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The commercial user's information was retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_user:
+ *                   type: integer
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 // Add other user properties here
+ *       404:
+ *         description: The commercial user was not found.
+ *       500:
+ *         description: There was an error retrieving the commercial user's information.
+ */
 const getMeCommercial = asyncHandler(async (req, res) => {
     try {
         // Get the user id from the request
@@ -236,6 +470,48 @@ const getMeCommercial = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /updateCommercial:
+ *   put:
+ *     summary: Update the commercial user's information
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               rib:
+ *                 type: string
+ *               id_role:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: The commercial user's information was updated successfully.
+ *       404:
+ *         description: The commercial user was not found.
+ *       500:
+ *         description: There was an error updating the commercial user's information.
+ */
 const updateCommercial = asyncHandler(async (req, res) => {
     try {
         // Get the user id and the new data from the request
@@ -273,6 +549,27 @@ const updateCommercial = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /deleteCommercial:
+ *   delete:
+ *     summary: Delete the commercial user's account
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The commercial user's account was deleted successfully.
+ *       404:
+ *         description: The commercial user was not found.
+ *       500:
+ *         description: There was an error deleting the commercial user's account.
+ */
 const deleteCommercial = asyncHandler(async (req, res) => {
     try {
         // Get the user id from the request
@@ -298,6 +595,27 @@ const deleteCommercial = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /suspendCommercial:
+ *   put:
+ *     summary: Suspend the commercial user's account
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The commercial user's account was suspended successfully.
+ *       404:
+ *         description: The commercial user was not found.
+ *       500:
+ *         description: There was an error suspending the commercial user's account.
+ */
 const suspendCommercial = asyncHandler(async (req, res) => {
     try {
         // Get the user id from the request
@@ -325,6 +643,27 @@ const suspendCommercial = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /unsuspendCommercial:
+ *   put:
+ *     summary: Unsuspend the commercial user's account
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The commercial user's account was unsuspended successfully.
+ *       404:
+ *         description: The commercial user was not found.
+ *       500:
+ *         description: There was an error unsuspending the commercial user's account.
+ */
 const unsuspendCommercial = asyncHandler(async (req, res) => {
     try {
         // Get the user id from the request

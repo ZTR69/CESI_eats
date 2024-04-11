@@ -1,16 +1,39 @@
 <template>
   <div class="home">
-    <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="false" :showAddress="false" />
+    <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false" />
     <div class="centered">
       <h1 style="margin-bottom: 30px">Recevez vos repas et délices favoris, directement à votre porte.</h1>
-      <SearchBar message="Recherchez votre adresse"/>
+      <form @submit.prevent="saveAddress">
+        <input v-model="address" type="text" placeholder="Entrez votre adresse">
+        <button type="submit">Enregistrer</button>
+      </form>
+      <SearchBar message="Recherchez votre adresse" />
     </div>
   </div>
 </template>
 
-<script setup>
+<script>
 import SearchBar from "@/components/SearchBar.vue";
 import NavigationBar from "@/components/NavigationBar.vue";
+
+export default {
+  components: {
+    SearchBar,
+    NavigationBar
+  },
+  data() {
+    return {
+      address: ""
+    };
+  },
+  methods: {
+    saveAddress() {
+      localStorage.setItem("userAddress", this.address);
+      console.log("Address saved: ", localStorage.getItem("userAddress"));
+      this.$router.push("/navigation");
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -48,5 +71,4 @@ import NavigationBar from "@/components/NavigationBar.vue";
     width: 90%;
   }
 }
-
 </style>
