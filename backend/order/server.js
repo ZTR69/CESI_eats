@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config()
 const colors = require('colors')
 const cors = require('cors');
 
+// Definition du port
 const port = process.env.PORT || 5010
 
 // Connexion à MySQL
@@ -12,7 +13,7 @@ sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
 
-sequelize.sync({ force: true })
+sequelize.sync()
     .then(() => {
       console.log('All tables have been successfully created.');
     })
@@ -26,10 +27,6 @@ connectDB()
 
 // Initialisation d'Express
 const app = express()
-
-// Accepter les données envoyées par formulaire
-app.use(express.json())
-app.use(express.urlencoded())
 
 // Accepter les données envoyées par formulaire
 app.use(express.json())

@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler')
 const OrderModel = require('../models/orderModel')
-const User = require('../models/userModel')
 
 const getOrder = asyncHandler(async (req, res) => {
     const order = await OrderModel.findOne({ orderID: req.params.orderID })
@@ -54,13 +53,9 @@ const addOrder = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Error no Item')
     }
-    if (req.user) {
-        const user = await User.findByPk(req.user.id_user);
-
-        if (!user) {
-            res.status(400);
-            throw new Error('User not found');
-        }
+    if (!req.user) { 
+        res.status(400);
+        throw new Error('User not found');
     }
     if (!req.body.addressDelivery) {
         res.status(400)

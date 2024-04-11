@@ -2,31 +2,27 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbMysql');
 
-const Permission = sequelize.define('permissions', {
+// recover Permission model form db without define it again
+const Permission = sequelize.define('Permission', {
     id_permission: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
+        primaryKey: true
     },
     name: {
         type: DataTypes.STRING(45),
         allowNull: false
-    },
-    description: {
-        type: DataTypes.STRING(45),
-        allowNull: false
-    },
-    created_at: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        allowNull: true
     }
 }, {
+    tableName: 'permissions',
     timestamps: false,
-    freezeTableName: true
+    indexes: [
+        {
+            unique: true,
+            fields: ['id_permission']
+        }
+    ]
 });
+
 
 module.exports = Permission;
