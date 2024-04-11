@@ -44,7 +44,12 @@ const initPermissions = asyncHandler( async () => {
     { name: 'addOrder', description: 'add an order' },
     { name: 'deleteOrder', description: 'Delete an order' },
     { name: 'readOrder', description: 'Read an order' },
-    { name: 'updateSatusOrder', description: 'Update the status of an order' }
+    { name: 'updateSatusOrder', description: 'Update the status of an order' },
+    { name: 'addDelivery', description: 'add an order' },
+    { name: 'deleteDelivery', description: 'Delete an order' },
+    { name: 'updateSatusDelivery', description: 'Update the status of an delivery' },
+    { name: 'updateDeliveryMan', description: 'Update the DeliveryMan of an delivery' },
+    { name: 'readDelivery', description: 'Read an order' }
   ]);
 
   // Insertion des permissions pour chaque rôle
@@ -59,10 +64,10 @@ const initPermissions = asyncHandler( async () => {
     */
   const rolePermissions = [
     { roleId: 1, permissions: ['read', 'write', 'delete', 'read_restaurant', 'read_menu','addOrder', 'deleteOrder', 'readOrder'] },
-    { roleId: 2, permissions: ['read', 'write', 'delete', 'read_restaurant', 'create_restaurant', 'update_restaurant', 'delete_restaurant', 'read_menu', 'create_menu', 'update_menu', 'delete_menu','readOrder', 'updateSatusOrder'] },
-    { roleId: 3, permissions: ['read', 'write', 'delete','updateSatusOrder'] },
+    { roleId: 2, permissions: ['read', 'write', 'delete', 'read_restaurant', 'create_restaurant', 'update_restaurant', 'delete_restaurant', 'read_menu', 'create_menu', 'update_menu', 'delete_menu','readOrder', 'updateSatusOrder','updateSatusDelivery','addDelivery'] },
+    { roleId: 3, permissions: ['read', 'write', 'delete','updateSatusOrder','readDelivery','updateSatusDelivery','updateDeliveryMan'] },
     { roleId: 4, permissions: ['read', 'write', 'delete'] },
-    { roleId: 5, permissions: ['read', 'write', 'delete', 'read_all_clients', 'write_all_clients', 'delete_all_clients', 'suspend_all_clients', 'read_all_clients','addOrder','deleteOrder'] },
+    { roleId: 5, permissions: ['read', 'write', 'delete', 'read_all_clients', 'write_all_clients', 'delete_all_clients', 'suspend_all_clients', 'read_all_clients','addOrder','deleteOrder','addDelivery','readDelivery','updateSatusDelivery','deleteDelivery','updateDeliveryMan'] },
     { roleId: 6, permissions: ['no_perm'] },
     { roleId: 7, permissions: ['all'] }
   ];

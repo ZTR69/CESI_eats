@@ -11,6 +11,7 @@ const routes = [
   { path: '/order-list', name:'OrderList', component: () => import('../views/Delivery/OrderList.vue')},
   { path: '/restaurant-home', name:'OrderListRestorer', component: () => import('../views/Restorers/Home.vue')},
   { path: '/charts', name:'Charts', component: () => import('../views/SalesDepartments/Statistics.vue')},
+  { path: '/userManagement', name:'UserManagement', component: () => import('../views/SalesDepartments/UserManagement.vue')},
 ]
 
 const router = createRouter({

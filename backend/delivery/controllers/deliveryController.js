@@ -24,8 +24,8 @@ const getDeliveryManDeliveries = asyncHandler(async (req, res) => {
     res.status(200).json(deliverys)
 })
 
-const getDeliveryManPendingDelivery = asyncHandler(async (req, res) => {
-    const deliverys = await DeliveryModel.find({ deliveryManID: req.params.deliveryManID, status: 'pending'})
+const getDeliveryManCookingDelivery = asyncHandler(async (req, res) => {
+    const deliverys = await DeliveryModel.find({ deliveryManID: req.params.deliveryManID, status: 'cooking'})
     if (!deliverys) {
         res.status(400)
         throw new Error('deliverys not found')
@@ -64,7 +64,7 @@ const addDelivery = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Error no order')
     }
-    if (!req.body.userID) {
+    if (!req.user.id_user) {
         res.status(400)
         throw new Error('Error no User')
     }
@@ -77,7 +77,7 @@ const addDelivery = asyncHandler(async (req, res) => {
         throw new Error('Error no addressRestaurant')
     }
 
-    const delivery = await DeliveryModel.create({ orderID: req.body.orderID, restaurantID: req.body.restaurantID, userID: req.body.userID, addressDelivery: req.body.addressDelivery, addressRestaurant: req.body.addressRestaurant})
+    const delivery = await DeliveryModel.create({ orderID: req.body.orderID, restaurantID: req.body.restaurantID, userID: req.user.id_user, addressDelivery: req.body.addressDelivery, addressRestaurant: req.body.addressRestaurant})
     res.json({ message: delivery })// TO DO retour orderID et itemID
 })
 
@@ -95,7 +95,7 @@ module.exports = {
     getDelivery,
     getDeliveries,
     getDeliveryManDeliveries,
-    getDeliveryManPendingDelivery,
+    getDeliveryManCookingDelivery,
     addDelivery,
     uppdateStatus,
     uppdateDeliveryMan,
