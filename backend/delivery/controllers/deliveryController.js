@@ -24,8 +24,8 @@ const getDeliveryManDeliveries = asyncHandler(async (req, res) => {
     res.status(200).json(deliverys)
 })
 
-const getDeliveryManPendingDelivery = asyncHandler(async (req, res) => {
-    const deliverys = await DeliveryModel.find({ deliveryManID: req.params.deliveryManID, status: 'pending'})
+const getDeliveryManCookingDelivery = asyncHandler(async (req, res) => {
+    const deliverys = await DeliveryModel.find({ deliveryManID: req.params.deliveryManID, status: 'cooking'})
     if (!deliverys) {
         res.status(400)
         throw new Error('deliverys not found')
@@ -95,7 +95,7 @@ module.exports = {
     getDelivery,
     getDeliveries,
     getDeliveryManDeliveries,
-    getDeliveryManPendingDelivery,
+    getDeliveryManCookingDelivery,
     addDelivery,
     uppdateStatus,
     uppdateDeliveryMan,

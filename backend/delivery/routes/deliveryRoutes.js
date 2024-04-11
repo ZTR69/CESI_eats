@@ -8,7 +8,7 @@ const {
 getDelivery,
 getDeliveries,
 getDeliveryManDeliveries,
-getDeliveryManPendingDelivery,
+getDeliveryManCookingDelivery,
 addDelivery,
 uppdateStatus,
 uppdateDeliveryMan,
@@ -17,7 +17,7 @@ deleteDelivery
 router.get('/all', authorization, permMiddleware, logMiddleware, getDeliveries)
 router.get('/:orderID', authorization, permMiddleware, logMiddleware, getDelivery)
 router.get('/deliveryMan/:deliveryManID', authorization, permMiddleware, logMiddleware, getDeliveryManDeliveries)
-router.get('/deliveryMan/:deliveryManID/pending', authorization, permMiddleware, logMiddleware, getDeliveryManPendingDelivery)
+router.get('/deliveryMan/:deliveryManID/cooking', authorization, permMiddleware, logMiddleware, getDeliveryManCookingDelivery)
 router.post('/', authorization, permMiddleware, logMiddleware, addDelivery)
 router.put('/:orderID/status', authorization, permMiddleware, logMiddleware, uppdateStatus)
 router.put('/:orderID/deliveryManID', authorization, permMiddleware, logMiddleware, uppdateDeliveryMan)
