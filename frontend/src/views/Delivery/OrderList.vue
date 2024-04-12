@@ -58,7 +58,6 @@ export default {
                     confirmButtonText: 'OK'
                 });
                 localStorage.setItem('orderID', orderId);
-                this.$router.push('/order-tracking');
             }
             else {
                 Swal.fire({

@@ -19,6 +19,9 @@ export default async function homeRedirect() {
         case 2:
             await router.push('/restaurant-home?getParam=order');
             break;
+        case 3:
+            await router.push('/order-list')
+            break;
         case 5:
             await router.push('/chart');
             break;
