@@ -83,7 +83,7 @@ export default {
             console.log('Order placed', this.order.items);
             const reponse = apiService.fetchJsonWithToken('/api/orders/add', 'http://localhost:5010', 'POST', this.order)
             // Check response
-            if (reponse.message) {
+            if (reponse.message !== null) {
                 Swal.fire({
                     title: 'Commande validée',
                     text: 'Votre commande a été validée !',
