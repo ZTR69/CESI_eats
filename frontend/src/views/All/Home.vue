@@ -40,7 +40,7 @@ export default {
 
 
 input[type="text"] {
-  width: 30rem;
+  width: 100%;
   height: 50px;
   padding: 5px;
   margin-right: 10px;
