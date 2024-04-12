@@ -39,14 +39,14 @@ export default {
     methods: {
         async fetchOrders() {
             try {
-                const response = await apiService.fetchJsonWithToken('/api/delivery/deliveryMan/cooking?deliveryManID=none', 'http://localhost:5015', 'GET');
+                const response = await apiService.fetchJsonWithToken('/api/delivery/deliveryMan/cooking?deliveryManID=none', 'http://51.210.150.141:5015', 'GET');
                 this.orders = response;
             } catch (error) {
                 console.error('Failed to fetch orders:', error);
             }
         },
         acceptOrder(orderId) {
-            const reponse= apiService.fetchJsonWithToken('/api/delivery/status/', 'http://localhost:5015', 'PUT', {
+            const reponse= apiService.fetchJsonWithToken('/api/delivery/status/', 'http://51.210.150.141:5015', 'PUT', {
                 orderID: orderId,
                 status: 'delivering'
             });

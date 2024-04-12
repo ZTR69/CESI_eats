@@ -38,7 +38,7 @@ let phone = ref('No phone number');
 let role = ref('');
 
 onMounted(async () => {
-  const data = await apiService.fetchJsonWithToken("/api/users/getMe", "http://localhost:5000", 'get', null);
+  const data = await apiService.fetchJsonWithToken("/api/users/getMe", "http://51.210.150.141:5000", 'get', null);
   name.value = data.name;
   email.value = data.email;
   phone.value = data.phone ? data.phone : 'No phone number';
@@ -81,7 +81,7 @@ const logout = () => {
 
 const delete_acc = async () => {
   try {
-    await apiService.fetchJsonWithToken("/api/users/delete", "http://localhost:5000", 'delete', null);
+    await apiService.fetchJsonWithToken("/api/users/delete", "http://51.210.150.141:5000", 'delete', null);
     localStorage.removeItem('token');
     Swal.fire({
     icon: 'success',

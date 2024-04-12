@@ -27,7 +27,7 @@ export default {
     UserCard
   },
   async mounted() {
-    const response = await apiService.fetchJsonWithToken('/api/restaurant/get', 'http://localhost:5005', 'GET');
+    const response = await apiService.fetchJsonWithToken('/api/restaurant/get', 'http://51.210.150.141:5005', 'GET');
     this.restaurants = response;
   }
 };

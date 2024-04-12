@@ -81,7 +81,7 @@ export default {
         },
         placeOrder() {
             console.log('Order placed', this.order.items);
-            const reponse = apiService.fetchJsonWithToken('/api/orders/add', 'http://localhost:5010', 'POST', this.order)
+            const reponse = apiService.fetchJsonWithToken('/api/orders/add', 'http://51.210.150.141:5010', 'POST', this.order)
             // Check response
             if (reponse.message !== null) {
                 Swal.fire({

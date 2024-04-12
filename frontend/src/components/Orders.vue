@@ -34,7 +34,7 @@ const router = useRouter();
 let list = ref([]);
 
 onMounted(async () => {
-  const data = await apiService.fetchJsonWithToken("/api/orders/restaurant/pending?restaurantID=1", "http://localhost:5010", 'get', null);
+  const data = await apiService.fetchJsonWithToken("/api/orders/restaurant/pending?restaurantID=1", "http://51.210.150.141:5010", 'get', null);
 
   let liste_effemer = [];
 
@@ -79,9 +79,9 @@ const acceptItem = async (index) => {
 
   list.value.splice(index, 1);
 
-  await apiService.fetchJsonWithToken(url, 'http://localhost:5010', 'put', {'status': 'cooking'});
+  await apiService.fetchJsonWithToken(url, 'http://51.210.150.141:5010', 'put', {'status': 'cooking'});
 
-  await apiService.fetchJsonWithToken('/api/delivery/add', 'http://localhost:5015', 'post', {
+  await apiService.fetchJsonWithToken('/api/delivery/add', 'http://51.210.150.141:5015', 'post', {
     "orderID": orderID,
     "restaurantID": restaurantID,
     "addressDelivery": addressDelivery,
@@ -97,7 +97,7 @@ const deleteItem = async (index) => {
   const orderID = list.value[index][0].orderID;
   list.value.splice(index, 1);
   const url = `/api/orders/status?orderID=${orderID}`;
-  await apiService.fetchJsonWithToken(url, 'http://localhost:5010', 'put', {'status': 'cancel'});
+  await apiService.fetchJsonWithToken(url, 'http://51.210.150.141:5010', 'put', {'status': 'cancel'});
 };
 
 const totalPrice = (items) => {
