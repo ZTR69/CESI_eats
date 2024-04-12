@@ -14,6 +14,7 @@
 <script>
 import SearchBar from "@/components/SearchBar.vue";
 import NavigationBar from "@/components/NavigationBar.vue";
+import homeRedirect from "@/services/homeRedirect.js";
 
 export default {
   components: {
@@ -31,6 +32,9 @@ export default {
       console.log("Address saved: ", localStorage.getItem("userAddress"));
       this.$router.push("/navigation");
     }
+  },
+  mounted() {
+    homeRedirect();
   }
 }
 </script>
@@ -47,7 +51,6 @@ input[type="text"] {
   border-radius: 5px;
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 14px;
   color: #333;
   font-size: 1.20rem;
   font-family: Montserrat, sans-serif;
