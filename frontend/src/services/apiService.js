@@ -17,12 +17,9 @@ class ApiService {
             if (data.token)  {
                 localStorage.setItem('token', data.token);
             }
-
-            alert("succès")
             return data;
         } catch (error) {
             console.error(error);
-            alert("echec")
             return null;
 
         }
@@ -51,7 +48,6 @@ class ApiService {
                 return await response.json();
             } catch (error) {
                 console.error(error);
-                alert("echec");
                 return null;
             }
         }
