@@ -32,7 +32,7 @@ export default {
     methods: {
         async fetchOrders() {
             try {
-                const response = await apiService.fetchJsonWithToken('/api/delivery/deliveryMan/cooking?deliveryManID=none', 'http://localhost:5020', 'GET');
+                const response = await apiService.fetchJsonWithToken('/api/delivery/deliveryMan/cooking?deliveryManID=none', 'http://localhost:5015', 'GET');
                 this.orders = response;
             } catch (error) {
                 console.error('Failed to fetch orders:', error);
