@@ -39,12 +39,12 @@ class ApiService {
             if (formData) {
                 requestOptions.body = JSON.stringify(formData);
             }
-            const url = base_url + route;
+            const url_2 = base_url + route;
             if (param) {
-                url += '?id=' + encodeURIComponent(param);
+                url_2 += '?id=' + encodeURIComponent(param);
             }
             try {
-                const response = await fetch(url, requestOptions);
+                const response = await fetch(url_2, requestOptions);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
