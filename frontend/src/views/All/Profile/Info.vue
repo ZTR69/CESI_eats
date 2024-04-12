@@ -41,7 +41,7 @@ onMounted(async () => {
   name.value = data.name;
   email.value = data.email;
   phone.value = data.phone ? data.phone : 'No phone number';
-  console.log(data);
+
   switch (data.id_role) {
     case 1:
       role.value = 'Client';

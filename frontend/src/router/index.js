@@ -12,6 +12,7 @@ const routes = [
   { path: '/restaurant-home', name:'OrderListRestorer', component: () => import('../views/Restorers/Home.vue')},
   { path: '/charts', name:'Charts', component: () => import('../views/SalesDepartments/Statistics.vue')},
   { path: '/userManagement', name:'UserManagement', component: () => import('../views/SalesDepartments/UserManagement.vue')},
+  { path: '/order-detail', name:'OrderDetail', component: () => import('../views/Restorers/Order.vue')},
 ]
 
 const router = createRouter({

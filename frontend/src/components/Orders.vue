@@ -3,20 +3,21 @@
     <ul>
       <li v-for="(item, index) in list" :key="index" class="list-item">
         <div class="column">
-          <img src="@/assets/img/profile.png" style="width: 60px" alt="profile"/>
+          <p>{{ index + 1 }}</p>
         </div>
         <div class="column">
-          <p>Nom: {{ item.name }}</p>
+          <ul>
+            <li v-for="(subItem, subIndex) in item" :key="subIndex">
+              <p>- {{ subItem.itemName }}</p>
+            </li>
+          </ul>
         </div>
         <div class="column">
-          <p>Numéro de téléphone: {{ item.phone }}</p>
+          <p>Prix total: {{ totalPrice(item) }}</p>
         </div>
         <div class="column">
-          <p>Prix: {{ item.price }}</p>
-        </div>
-        <div class="column">
-          <button type="button" class="btn btn-warning">Accepter</button>
-          <button type="button" class="btn btn-danger">Refuser</button>
+          <button type="button" class="btn btn-warning" @click="acceptItem(index)">Accepter</button>
+          <button type="button" class="btn btn-danger" @click="deleteItem(index)">Refuser</button>
         </div>
       </li>
     </ul>
@@ -24,26 +25,62 @@
 </template>
 
 <script setup>
-const list = [
-  {name: 'Element 1', phone: '1234567890', price: '10€'},
-  {name: 'Element 2', phone: '0987654321', price: '20€'},
-  {name: 'Element 3', phone: '1122334455', price: '30€'},
-  {name: 'Element 2', phone: '0987654321', price: '20€'},
-  {name: 'Element 3', phone: '1122334455', price: '30€'},
-  {name: 'Element 2', phone: '0987654321', price: '20€'},
-  {name: 'Element 3', phone: '1122334455', price: '30€'},
-  {name: 'Element 2', phone: '0987654321', price: '20€'},
-  {name: 'Element 3', phone: '1122334455', price: '30€'},
-  {name: 'Element 2', phone: '0987654321', price: '20€'},
-  {name: 'Element 3', phone: '1122334455', price: '30€'},
-  {name: 'Element 4', phone: '5566778899', price: '40€'}
-];
+import {onMounted, ref} from 'vue';
+import apiService from "@/services/apiService.js";
+
+let list = ref([]);
+
+onMounted(async () => {
+  const data = await apiService.fetchJsonWithToken("/api/orders/restaurant/pending?restaurantID=1", "http://localhost:5010", 'get', null);
+
+  let liste_effemer = [];
+
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[i].items.length; j++) {
+      liste_effemer.push({
+        itemName : data[i].items[j].itemName,
+        prix : data[i].items[j].prix,
+        orderID : data[i].orderID,
+        restaurantID : data[i].restaurantID,
+        addressDelivery : data[i].addressDelivery,
+        addressRestaurant : data[i].addressRestaurant,
+      });
+      console.log(liste_effemer);
+    }
+    list.value.push(liste_effemer);
+    liste_effemer = [];
+  }
+});
+
+const acceptItem = async (index) => {
+
+  const url = `/api/orders/status?orderID=${list.value[index][0].orderID}`;
+  await apiService.fetchJsonWithToken(url, 'http://localhost:5010', 'put', {'status': 'cooking'});
+
+  console.log(apiService.fetchJsonWithToken('/api/delivery', 'http://localhost:5015', 'post', {
+    'orderID': list.value[index][0].orderID,
+    'restaurantID': list.value[index][0].restaurantID,
+    'addressDelivery': list.value[index][0].addressDelivery,
+    'addressRestaurant': list.value[index][0].addressRestaurant,
+  }))
+};
+
+const deleteItem = async (index) => {
+  const orderID = list.value[index][0].orderID;
+  list.value.splice(index, 1);
+  const url = `/api/orders/status?orderID=${orderID}`;
+  await apiService.fetchJsonWithToken(url, 'http://localhost:5010', 'put', {'status': 'cancel'});
+};
+
+const totalPrice = (items) => {
+  return items.reduce((total, item) => total + item.prix, 0);
+};
+
 </script>
 
 <style scoped>
 
 .list-container {
-  margin: 0 auto;
   width: 80%;
 }
 
@@ -70,6 +107,7 @@ const list = [
 }
 
 .list-container ul .list-item .column button {
-  margin: 0 2px; /* Cela ajoute une marge de 5px à gauche et à droite du bouton */
+  margin: 0 3px;
 }
+
 </style>
