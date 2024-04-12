@@ -2,10 +2,15 @@
     <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false" :hide-button="true" />
     <div>
         <h1>Order List</h1>
-        <p> {{ orders }}</p>
         <div class="card-grid">
-            <DeliveryCard v-for="(order, index) in orders" :key="index" :orderId="order.orderId" :image="order.image"
-                :restaurantName="order.restaurantName" :restaurantAddress="order.restaurantAddress" />
+            <div class="card" v-for="order in orders" :key="order.id">
+                <div class="card-body">
+                    <h5 class="card-title">Commande en cours</h5>
+                    <p class="card-text">Restaurant Address: {{ order.addressRestaurant }}</p>
+                    <p class="card-text">Delivery Address: {{ order.addressDelivery }}</p>
+                    <button class="btn btn-primary" @click="acceptOrder(order.orderID)">Accepter</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -16,6 +21,7 @@ import NavigationBar from '@/components/NavigationBar.vue';
 import apiService from '@/services/apiService';
 
 export default {
+    props: ['orderId', 'image', 'restaurantName', 'restaurantAddress', 'addressDelivery'],
     components: {
         DeliveryCard,
         NavigationBar,
@@ -37,9 +43,14 @@ export default {
             } catch (error) {
                 console.error('Failed to fetch orders:', error);
             }
+        },
+        acceptOrder(orderId) {
+            localStorage.setItem('orderID', orderId);
+            this.$router.push('/order-tracking');
         }
     }
-};
+}
+
 </script>
 
 <style scoped></style>

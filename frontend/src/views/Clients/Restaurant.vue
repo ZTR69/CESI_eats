@@ -37,7 +37,6 @@
                                 :restaurantAddress="restaurant.address"
                                 :showAddToCartButton="true"
                             />
-                            
                     </div>
                 </div>
             </div>

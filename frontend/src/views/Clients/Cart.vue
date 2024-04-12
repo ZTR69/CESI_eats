@@ -30,7 +30,6 @@
                     <input v-model="paymentInfo.cvv" required>
                 </label>
                 <button type="submit">Confirmer la commande</button>
-                <p> {{ this.order }} </p>
             </form>
         </div>
         <div v-if="showModal" class="order-confirmation">
@@ -81,7 +80,7 @@ export default {
         },
         placeOrder() {
             console.log('Order placed', this.order.items);
-            apiService.fetchJsonWithToken('/api/orders/add', 'http://localhost:5010', 'POST', this.order.items)
+            apiService.fetchJsonWithToken('/api/orders/add', 'http://localhost:5010', 'POST', this.order)
                 .then(response => {
                     localStorage.setItem('orderID', JSON.stringify(response.message));
                 });

@@ -1,20 +1,13 @@
 <template>
-    <div>
-      <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="true" :showAddress="true"
-        :hide-button="true" />
-      <h1>Liste des restaurants</h1>
-      <p> {{ restaurants }}</p>
-      <div class="card-grid"> 
-        <UserCard
-          v-for="restaurant in restaurants"
-          :key="restaurant.id_restaurant"
-          :id="restaurant.id_restaurant"
-          :image="restaurant.Image"
-          :title="restaurant.Name"
-          :address="restaurant.Adress"
-        />
-      </div>
+  <div>
+    <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="true" :showAddress="true"
+      :hide-button="true" />
+    <h1>Liste des restaurants</h1>
+    <div class="card-grid">
+      <UserCard v-for="restaurant in restaurants" :key="restaurant.id_restaurant" :id="restaurant.id_restaurant"
+        :image="restaurant.Image" :title="restaurant.Name" :address="restaurant.Adress" />
     </div>
+  </div>
 </template>
 
 <script>
