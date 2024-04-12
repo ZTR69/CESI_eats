@@ -43,6 +43,7 @@
 import MenuComponent from '@/components/MenuComponent.vue';
 import NavigationBar from '@/components/NavigationBar.vue';
 import apiService from '@/services/apiService';
+import Swal from 'sweetalert2';
 
 export default {
     components: {
@@ -81,11 +82,26 @@ export default {
         },
         placeOrder() {
             console.log('Order placed', this.order.items);
-            apiService.fetchJsonWithToken('/api/orders/add', 'http://localhost:5010', 'POST', this.order.items)
-                .then(response => {
-                    localStorage.setItem('orderID', JSON.stringify(response.message));
+            const reponse = apiService.fetchJsonWithToken('/api/orders/add', 'http://localhost:5010', 'POST', this.order.items)
+            // Check response
+            if (reponse.message) {
+                Swal.fire({
+                    title: 'Commande validée',
+                    text: 'Votre commande a été validée !',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
                 });
-            
+                localStorage.setItem('orderID', JSON.stringify(reponse.message));
+                this.$router.push('/');
+            } else {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Une erreur est survenue lors de la validation de votre commande',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                this.$router.push('/navigation');
+            }
             
             console.log('Payment Info:', this.paymentInfo);
             this.showModal = true;
