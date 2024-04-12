@@ -27,6 +27,9 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import apiService from "@/services/apiService.js";
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 let list = ref([]);
 
@@ -55,6 +58,7 @@ onMounted(async () => {
 let isRequestSent = ref(false);
 
 const acceptItem = async (index) => {
+
   if (isRequestSent.value) {
     return;
   }
@@ -68,6 +72,11 @@ const acceptItem = async (index) => {
 
   const url = `/api/orders/status?orderID=${orderID}`;
 
+  localStorage.setItem('acceptedOrder', JSON.stringify({
+    order: list.value[index],
+    orderId: orderID
+  }));
+
   list.value.splice(index, 1);
 
   await apiService.fetchJsonWithToken(url, 'http://localhost:5010', 'put', {'status': 'cooking'});
@@ -79,8 +88,11 @@ const acceptItem = async (index) => {
     "addressRestaurant": addressRestaurant
   })
 
+  await router.push('/order-detail');
+
   isRequestSent.value = false;
 };
+
 const deleteItem = async (index) => {
   const orderID = list.value[index][0].orderID;
   list.value.splice(index, 1);
