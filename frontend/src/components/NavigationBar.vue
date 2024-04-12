@@ -126,6 +126,11 @@ export default {
   methods: {
     myFunction() {
       console.log("clic");
+    },
+    saveAddress() {
+      localStorage.setItem('userAddress', this.address);
+      console.log('Address saved: ', localStorage.getItem('userAddress'));
+      this.editingAddress = false;
     }
   }
 }
