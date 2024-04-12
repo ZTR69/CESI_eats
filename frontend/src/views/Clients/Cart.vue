@@ -30,7 +30,6 @@
                     <input v-model="paymentInfo.cvv" required>
                 </label>
                 <button type="submit">Confirmer la commande</button>
-                <p> {{ this.order }} </p>
             </form>
         </div>
         <div v-if="showModal" class="order-confirmation">
@@ -43,6 +42,7 @@
 import MenuComponent from '@/components/MenuComponent.vue';
 import NavigationBar from '@/components/NavigationBar.vue';
 import apiService from '@/services/apiService';
+import Swal from 'sweetalert2';
 
 export default {
     components: {
@@ -60,8 +60,6 @@ export default {
                 expiryDate: '',
                 cvv: ''
             }
-
-
         };
     },
     computed: {
@@ -82,12 +80,28 @@ export default {
             this.order.items = cart;
         },
         placeOrder() {
-            apiService.fetchJsonWithToken('/api/orders', 'http://localhost:5010', 'POST', this.order)
-                .then(response => {
-                    localStorage.setItem('orderID', JSON.stringify(response.message));
+            console.log('Order placed', this.order.items);
+            const reponse = apiService.fetchJsonWithToken('/api/orders/add', 'http://localhost:5010', 'POST', this.order)
+            // Check response
+            if (reponse.message !== null) {
+                Swal.fire({
+                    title: 'Commande validée',
+                    text: 'Votre commande a été validée !',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
                 });
+                localStorage.setItem('orderID', JSON.stringify(reponse.message));
+                this.$router.push('/');
+            } else {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Une erreur est survenue lors de la validation de votre commande',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                this.$router.push('/navigation');
+            }
             
-            console.log('Order placed', this.order);
             console.log('Payment Info:', this.paymentInfo);
             this.showModal = true;
             this.showOrderForm = false;

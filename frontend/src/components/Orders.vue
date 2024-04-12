@@ -27,6 +27,9 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import apiService from "@/services/apiService.js";
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 let list = ref([]);
 
@@ -52,17 +55,42 @@ onMounted(async () => {
   }
 });
 
+let isRequestSent = ref(false);
+
 const acceptItem = async (index) => {
 
-  const url = `/api/orders/status?orderID=${list.value[index][0].orderID}`;
+  if (isRequestSent.value) {
+    return;
+  }
+
+  isRequestSent.value = true;
+
+  const orderID = list.value[index][0].orderID;
+  const restaurantID = list.value[index][0].restaurantID;
+  const addressDelivery = list.value[index][0].addressDelivery;
+  const addressRestaurant = list.value[index][0].addressRestaurant;
+
+  const url = `/api/orders/status?orderID=${orderID}`;
+
+  localStorage.setItem('acceptedOrder', JSON.stringify({
+    order: list.value[index],
+    orderId: orderID
+  }));
+
+  list.value.splice(index, 1);
+
   await apiService.fetchJsonWithToken(url, 'http://localhost:5010', 'put', {'status': 'cooking'});
 
-  console.log(apiService.fetchJsonWithToken('/api/delivery', 'http://localhost:5015', 'post', {
-    'orderID': list.value[index][0].orderID,
-    'restaurantID': list.value[index][0].restaurantID,
-    'addressDelivery': list.value[index][0].addressDelivery,
-    'addressRestaurant': list.value[index][0].addressRestaurant,
-  }))
+  await apiService.fetchJsonWithToken('/api/delivery/add', 'http://localhost:5015', 'post', {
+    "orderID": orderID,
+    "restaurantID": restaurantID,
+    "addressDelivery": addressDelivery,
+    "addressRestaurant": addressRestaurant
+  })
+
+  await router.push('/order-detail');
+
+  isRequestSent.value = false;
 };
 
 const deleteItem = async (index) => {

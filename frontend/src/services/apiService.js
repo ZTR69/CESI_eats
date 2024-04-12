@@ -17,12 +17,9 @@ class ApiService {
             if (data.token)  {
                 localStorage.setItem('token', data.token);
             }
-
-            alert("succès")
             return data;
         } catch (error) {
             console.error(error);
-            alert("echec")
             return null;
 
         }
@@ -39,7 +36,7 @@ class ApiService {
             if (formData) {
                 requestOptions.body = JSON.stringify(formData);
             }
-            const url_2 = base_url + route;
+            let url_2 = base_url + route;
             if (param) {
                 url_2 += '?id=' + encodeURIComponent(param);
             }
@@ -48,10 +45,11 @@ class ApiService {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                return await response.json();
+                const data = await response.json();
+                console.log(data);
+                return data;
             } catch (error) {
                 console.error(error);
-                alert("echec");
                 return null;
             }
         }
