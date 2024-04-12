@@ -16,13 +16,13 @@ deleteItem,
 deleteOrder
 } = require('../controllers/orderController')
 router.get('/all', authorization, permMiddleware, logMiddleware, getOrders)
-router.get('/', authorization, permMiddleware, logMiddleware, getOrder)
+router.get('/order', authorization, permMiddleware, logMiddleware, getOrder)
 router.get('/restaurant', authorization, permMiddleware, logMiddleware, getRestaurantOrders)
 router.get('/restaurant/pending', authorization, permMiddleware, logMiddleware, getRestaurantPendingOrders)
-router.post('/', authorization, permMiddleware, logMiddleware, addOrder)
+router.post('/add', authorization, permMiddleware, logMiddleware, addOrder)
 router.put('/item', authorization, permMiddleware, logMiddleware, addItem)
 router.put('/status', authorization, permMiddleware, logMiddleware, uppdateStatus)
 router.delete('/item', authorization, permMiddleware, logMiddleware, deleteItem)
-router.delete('/', authorization, permMiddleware, logMiddleware, deleteOrder)
+router.delete('/order', authorization, permMiddleware, logMiddleware, deleteOrder)
 module.exports = router
 

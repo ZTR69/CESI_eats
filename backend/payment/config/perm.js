@@ -1,5 +1,5 @@
 const permTab = {
-    '/': {
+    '/add': {
         'POST': ['addPayment','all']
     }
 };

@@ -1,6 +1,7 @@
 <template>
     <div>
-      <NavigationBar />
+      <NavigationBar class="home" :is-connected="false" :showSearchBar="false" :show-cart="true" :showAddress="true"
+        :hide-button="true" />
       <h1>Liste des restaurants</h1>
       <p> {{ restaurants }}</p>
       <div class="card-grid"> 
