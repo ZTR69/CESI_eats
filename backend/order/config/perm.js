@@ -2,7 +2,7 @@ const permTab = {
     '/all': {
         'GET': ['readOrder','all']
     },
-    '/': {
+    '/order': {
         'GET': ['readOrder','all']
     },
     '/restaurant/': {
@@ -11,7 +11,7 @@ const permTab = {
     '/restaurant/pending': {
         'GET': ['readOrder','all']
     },
-    '/': {
+    '/add': {
         'POST': ['addOrder','all']
     },
     '/item': {
@@ -23,7 +23,7 @@ const permTab = {
     '/item': {
         'DELETE': ['deleteOrder','all']
     },
-    '/': {
+    '/order': {
         'DELETE': ['deleteOrder','all']
     }
 };

@@ -5,13 +5,13 @@ const permTab = {
     '/all': {
         'GET': ['readDelivery','all']
     },
-    '/': {
+    '/delivery': {
         'GET': ['readDelivery','all']
     },
     '/deliveryMan/': {
         'GET': ['readDelivery','all']
     },
-    '/': {
+    '/add': {
         'POST': ['addDelivery','all']
     },
     '/status': {
@@ -20,7 +20,7 @@ const permTab = {
     '/deliveryManID': {
         'PUT': ['updateSatusOrder','all']
     },
-    '/': {
+    '/delivery': {
         'DELETE': ['deleteOrder','all']
     }
 };

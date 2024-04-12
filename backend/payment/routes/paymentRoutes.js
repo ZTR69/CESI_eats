@@ -7,6 +7,6 @@ const { permMiddleware } = require('../middlewares/permMiddleware')
 const {
     addPayment
 } = require('../controllers/paymentController')
-router.post('/', authorization, permMiddleware, logMiddleware, addPayment)
+router.post('/add', authorization, permMiddleware, logMiddleware, addPayment)
 module.exports = router
 
