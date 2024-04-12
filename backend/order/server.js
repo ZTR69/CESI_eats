@@ -20,7 +20,6 @@ sequelize.sync()
     .catch(error => console.error('Unable to create tables:', error));
   
   
-
 // Connexion à MongoDB
 const connectDB = require('./config/dbMongo')
 connectDB()
