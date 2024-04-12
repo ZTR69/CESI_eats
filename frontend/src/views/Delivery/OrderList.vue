@@ -1,17 +1,11 @@
 <template>
-    <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false"  :hide-button="true"/>
+    <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false" :hide-button="true" />
     <div>
         <h1>Order List</h1>
         <p> {{ orders }}</p>
         <div class="card-grid">
-            <DeliveryCard 
-                v-for="(order, index) in orders" 
-                :key="index"
-                :orderId="order.orderId"
-                :image="order.image"
-                :restaurantName="order.restaurantName"
-                :restaurantAddress="order.restaurantAddress"
-            />
+            <DeliveryCard v-for="(order, index) in orders" :key="index" :orderId="order.orderId" :image="order.image"
+                :restaurantName="order.restaurantName" :restaurantAddress="order.restaurantAddress" />
         </div>
     </div>
 </template>
@@ -31,11 +25,21 @@ export default {
             orders: []
         }
     },
-async mounted() {
-        const response = await apiService.fetchJsonWithToken('/api/delivery/deliveryMan/cooking?deliveryManID=none', 'http://localhost:5020', 'GET',);
-        this.orders = response;
-}
-}
+    async mounted() {
+        this.fetchOrders();
+        setInterval(this.fetchOrders, 5000);
+    },
+    methods: {
+        async fetchOrders() {
+            try {
+                const response = await apiService.fetchJsonWithToken('/api/delivery/deliveryMan/cooking?deliveryManID=none', 'http://localhost:5020', 'GET');
+                this.orders = response;
+            } catch (error) {
+                console.error('Failed to fetch orders:', error);
+            }
+        }
+    }
+};
 </script>
 
 <style scoped></style>

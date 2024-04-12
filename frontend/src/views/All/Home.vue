@@ -2,12 +2,11 @@
   <div class="home">
     <NavigationBar class="home" :showSearchBar="false" :show-cart="false" :showAddress="false" />
     <div class="centered">
-      <h1 style="margin-bottom: 30px">Recevez vos repas et délices favoris, directement à votre porte.</h1>
+      <h1 style="margin-bottom: 30px ">Recevez vos repas et délices favoris, directement à votre porte.</h1>
       <form @submit.prevent="saveAddress">
         <input v-model="address" type="text" placeholder="Entrez votre adresse">
         <button type="submit">Enregistrer</button>
       </form>
-      <SearchBar message="Recherchez votre adresse" />
     </div>
   </div>
 </template>
@@ -37,6 +36,34 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+input[type="text"] {
+  width: 500px;
+  height: 50px;
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  color: #333;
+  font-size: 1.20rem;
+  font-family: Montserrat, sans-serif;
+}
+
+button[type="submit"] {
+  height: 50px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #f1f1f1;
+  color: #333;
+  font-size: 1.20rem;
+  font-family: Montserrat, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 .home {
   position: relative;
   background: url('../../assets/img/background.jpg') no-repeat center center fixed;
