@@ -220,12 +220,14 @@ const deleteRestaurant = asyncHandler(async (req, res) => {
 });
 
 const initRestaurants = asyncHandler(async () => {
+    // Vider la table
+    await Restaurant.destroy({ where: {} });
     // Create some restaurants
     await Restaurant.bulkCreate([
-        { Name: 'McDonalds', Note: 4.5, Adress: '1 rue de la paix', user_id_user: 1, Image: 'https://www.mcdonalds.fr/sites/default/files/2021-03/Logo_McDo_0.png' },
-        { Name: 'KFC', Note: 4.3, Adress: '2 rue de la paix', user_id_user: 2, Image: 'https://www.kfc.fr/sites/default/files/2021-03/Logo_KFC_0.png' },
-        { Name: 'Burger King', Note: 4.4, Adress: '3 rue de la paix', user_id_user: 3, Image: 'https://www.burgerking.fr/sites/default/files/2021-03/Logo_BK_0.png' },
-        { Name: 'Quick', Note: 4.1, Adress: '4 rue de la paix', user_id_user: 4, Image: 'https://www.quick.fr/sites/default/files/2021-03/Logo_Quick_0.png' }
+        { Name: 'McDonalds', Note: 4.5, Adress: '1 rue de la paix', user_id_user: 1, Image: 'https://d1ralsognjng37.cloudfront.net/d7eda40f-8420-4a66-99b9-924cdafb668a.jpeg' },
+        { Name: 'KFC', Note: 4.3, Adress: '2 rue de la paix', user_id_user: 2, Image: 'https://tb-static.uber.com/prod/image-proc/processed_images/9995b26ece9bbbb0770866d69c9d9f08/fdf52d66534809b650058f41d517d74a.jpeg' },
+        { Name: 'Burger King', Note: 4.4, Adress: '3 rue de la paix', user_id_user: 3, Image: 'https://tb-static.uber.com/prod/image-proc/processed_images/64d5b6cf0e05b04b99ff8ea0faee804f/445a4b2618e10f7db95d4f17a85b117d.jpeg' },
+        { Name: 'Quick', Note: 4.1, Adress: '4 rue de la paix', user_id_user: 4, Image: 'https://tb-static.uber.com/prod/image-proc/processed_images/575287464730cc1e4cea51d51464459a/97ef7458dde62fa918635bc21265d9f5.jpeg' }
     ]);
 });
 
