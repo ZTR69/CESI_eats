@@ -50,7 +50,7 @@ const handleSubmit = async () => {
     formData.id_role = props.id_role;
   }
   try {
-    const data = await apiService.fetchJson(props.route, "http://localhost:5000", props.verb, formData);
+    const data = await apiService.fetchJson(props.route, "http://51.210.150.141:5000", props.verb, formData);
     console.log(data);
     router.push('/');
     Swal.fire({

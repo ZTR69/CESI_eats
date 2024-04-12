@@ -60,7 +60,7 @@ const handleSubmit = async () => {
         formData.id_role = props.id_role;
     }
     try {
-        const data = await apiService.fetchJsonWithToken(props.route, "http://localhost:5000", props.verb, formData, props.id_of_the_user);
+        const data = await apiService.fetchJsonWithToken(props.route, "http://51.210.150.141:5000", props.verb, formData, props.id_of_the_user);
         console.log(data);
         router.push('/userManagement?showUser=true');
     } catch (error) {
