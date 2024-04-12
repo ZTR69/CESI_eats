@@ -28,6 +28,7 @@ import EditableElement from "@/components/EditableElement.vue";
 import apiService from "@/services/apiService.js";
 import {onMounted, ref} from 'vue';
 import {useRouter} from "vue-router";
+import Swal from 'sweetalert2';
 
 const router = useRouter();
 
@@ -69,7 +70,12 @@ onMounted(async () => {
 // Ajout de la méthode de déconnexion
 const logout = () => {
   localStorage.removeItem('token');
-  alert('Déconnexion réussie');
+  Swal.fire({
+    icon: 'success',
+    title: 'Déconnecté',
+    showConfirmButton: false,
+    timer: 1500
+  });
   router.push('/');
 };
 
@@ -77,7 +83,12 @@ const delete_acc = async () => {
   try {
     await apiService.fetchJsonWithToken("/api/users/delete", "http://localhost:5000", 'delete', null);
     localStorage.removeItem('token');
-    alert('Compte supprimé');
+    Swal.fire({
+    icon: 'success',
+    title: 'Déconnecté',
+    showConfirmButton: false,
+    timer: 1500
+  });
     router.push('/');
   } catch (error) {
     console.log(error);

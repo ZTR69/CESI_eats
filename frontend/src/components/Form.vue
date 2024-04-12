@@ -24,7 +24,7 @@ import CustomButton from "@/components/CustomButton.vue";
 import {reactive} from "vue";
 import apiService from "@/services/apiService.js";
 import {useRouter} from "vue-router"; // Import apiService
-
+import Swal from 'sweetalert2';
 const router = useRouter();
 
 const props = defineProps({
@@ -53,6 +53,12 @@ const handleSubmit = async () => {
     const data = await apiService.fetchJson(props.route, "http://localhost:5000", props.verb, formData);
     console.log(data);
     router.push('/');
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        showConfirmButton: false,
+        timer: 1500
+      });
   } catch (error) {
     console.log(error);
   }
