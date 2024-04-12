@@ -1,35 +1,67 @@
 <template>
-  <div class="padding">
-    <h1 class="info-text">Liste de commandes</h1>
-    <Orders />
+  <div class="container">
+    <NavigationBar :showSearchBar="false" :show-cart="true" :showAddress="false"  :hide-button="true" :hide-toggle="true"/>
+    <h1 class="title">Commande numéro {{ orderId }}</h1>
+    <ul class="list">
+      <li v-for="(item, index) in list" :key="index" class="list-item">
+        {{ item }}
+      </li>
+    </ul>
+    <button class="finish-button">Terminer</button>
   </div>
 </template>
 
 <script setup>
-import Orders from "@/components/Orders.vue";
+import { ref } from 'vue';
+import NavigationBar from "@/components/NavigationBar.vue";
+
+const props = defineProps({
+  orderId: String,
+});
+
+let list = ref(['Item 1', 'Item 2', 'Item 3']); // Remplacez par vos données
 </script>
 
 <style scoped>
-.padding {
+.container {
   display: flex;
-  align-items: center;
   flex-direction: column;
-  margin-left: 200px;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.info-text {
-  font-size: 1.5em;
-  margin-bottom: 40px;
+.title {
+  font-size: 2em;
+  margin-top: 0; /* Ajoutez cette ligne pour supprimer la marge supérieure */
+  margin-bottom: 20px;
 }
 
-.centered-buttons > button {
-  margin-bottom: 10px;
+.list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-@media (max-width: 600px) {
-  .padding {
-    margin-left: 0;
-  }
+.list-item {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
 }
 
+.finish-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.2em;
+  background-color: yellowgreen;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 </style>

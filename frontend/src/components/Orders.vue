@@ -16,7 +16,7 @@
           <p>Prix total: {{ totalPrice(item) }}</p>
         </div>
         <div class="column">
-          <button type="button" class="btn btn-warning">Accepter</button>
+          <button type="button" class="btn btn-warning" @click="acceptItem(index)">Accepter</button>
           <button type="button" class="btn btn-danger" @click="deleteItem(index)">Refuser</button>
         </div>
       </li>
@@ -35,14 +35,15 @@ onMounted(async () => {
 
   let liste_effemer = [];
 
-  console.log(data);
-
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < data[i].items.length; j++) {
       liste_effemer.push({
         itemName : data[i].items[j].itemName,
         prix : data[i].items[j].prix,
-        orderID : data[i].orderID
+        orderID : data[i].orderID,
+        restaurantID : data[i].restaurantID,
+        addressDelivery : data[i].addressDelivery,
+        addressRestaurant : data[i].addressRestaurant,
       });
       console.log(liste_effemer);
     }
@@ -50,6 +51,19 @@ onMounted(async () => {
     liste_effemer = [];
   }
 });
+
+const acceptItem = async (index) => {
+
+  const url = `/api/orders/status?orderID=${list.value[index][0].orderID}`;
+  await apiService.fetchJsonWithToken(url, 'http://localhost:5010', 'put', {'status': 'cooking'});
+
+  console.log(apiService.fetchJsonWithToken('/api/delivery', 'http://localhost:5015', 'post', {
+    'orderID': list.value[index][0].orderID,
+    'restaurantID': list.value[index][0].restaurantID,
+    'addressDelivery': list.value[index][0].addressDelivery,
+    'addressRestaurant': list.value[index][0].addressRestaurant,
+  }))
+};
 
 const deleteItem = async (index) => {
   const orderID = list.value[index][0].orderID;

@@ -6,7 +6,7 @@ import SideBar from "@/components/SideBar.vue";
 import infoImg from '@/assets/img/info.png';
 import securityImg from '@/assets/img/security.png';
 import confidentialityImg from '@/assets/img/confidentiality.png';
-import Order from "@/views/Restorers/Order.vue";
+import OrderList from "@/views/Restorers/OrderList.vue";
 import OrderHistory from "@/views/Restorers/OrderHistory.vue";
 import Stats from "@/views/Restorers/Stats.vue";
 
@@ -21,7 +21,7 @@ import Stats from "@/views/Restorers/Stats.vue";
   ['Stat et données', 'stat', confidentialityImg]
   ]" />
 
-  <Order v-if="$route.query.getParam === 'order'" />
+  <OrderList v-if="$route.query.getParam === 'order'" />
   <OrderHistory v-if="$route.query.getParam === 'history'" />
   <Stats v-if="$route.query.getParam === 'stat'" />
 </template>
