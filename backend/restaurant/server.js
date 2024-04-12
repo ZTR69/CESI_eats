@@ -61,7 +61,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/restaurants/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Console log path swagger
-console.log('Swagger running on http://localhost:5001/restaurants/api-docs/')
+console.log('Swagger running on http://localhost:5005/restaurants/api-docs/')
 
 // Launch server
 app.listen(port, () => {

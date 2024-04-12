@@ -43,6 +43,7 @@
 import MenuComponent from '@/components/MenuComponent.vue';
 import NavigationBar from '@/components/NavigationBar.vue';
 import apiService from '@/services/apiService';
+import Swal from 'sweetalert2';
 
 export default {
     components: {
@@ -94,7 +95,13 @@ export default {
             // vider le panier
             localStorage.removeItem('cart');
             this.order.items = [];
-
+            Swal.fire({
+                icon: 'success',
+                title: 'PAYEMENT EFFECTUÉ AVEC SUCCÈS',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            this.$router.push('/');
         }
     },
     created() {

@@ -52,13 +52,22 @@ const handleSubmit = async () => {
   try {
     const data = await apiService.fetchJson(props.route, "http://localhost:5000", props.verb, formData);
     console.log(data);
-    router.push('/');
-    Swal.fire({
+    // IF the data is not empty, we redirect to the home page
+    if (data !== null) {
+      router.push('/');
+      Swal.fire({
         icon: 'success',
         title: 'Success',
         showConfirmButton: false,
         timer: 1500
       });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Une erreur est survenue !',
+      });
+    }
   } catch (error) {
     console.log(error);
   }

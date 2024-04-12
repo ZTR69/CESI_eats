@@ -75,6 +75,7 @@ const createRestaurant = asyncHandler(async (req, res) => {
  *         description: Internal server error
  */
 const getRestaurants = asyncHandler(async (req, res) => {
+    console.log('user try to get all restaurants');
     const restaurants = await Restaurant.findAll()
     res.json(restaurants)
 });
