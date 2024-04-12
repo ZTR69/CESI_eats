@@ -19,6 +19,7 @@
 import DeliveryCard from '@/components/DeliveryCard.vue';
 import NavigationBar from '@/components/NavigationBar.vue';
 import apiService from '@/services/apiService';
+import Swal from 'sweetalert2';
 
 export default {
     props: ['orderId', 'image', 'restaurantName', 'restaurantAddress', 'addressDelivery'],
@@ -45,8 +46,32 @@ export default {
             }
         },
         acceptOrder(orderId) {
-            localStorage.setItem('orderID', orderId);
-            this.$router.push('/order-tracking');
+            const reponse= apiService.fetchJsonWithToken('/api/delivery/status/', 'http://localhost:5015', 'PUT', {
+                orderID: orderId,
+                status: 'delivering'
+            });
+            if (reponse !== null) {
+                Swal.fire({
+                    title: 'Commande acceptée',
+                    text: 'La commande a été acceptée !',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+                localStorage.setItem('orderID', orderId);
+                this.$router.push('/order-tracking');
+            }
+            else {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'La commande n\'a pas pu être acceptée',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+            
+
+
+            
         }
     }
 }
