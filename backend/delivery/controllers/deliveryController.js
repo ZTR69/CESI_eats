@@ -25,7 +25,7 @@ const getDeliveryManDeliveries = asyncHandler(async (req, res) => {
 })
 
 const getDeliveryManCookingDelivery = asyncHandler(async (req, res) => {
-    const deliverys = await DeliveryModel.find({ deliveryManID: req.query.deliveryManID, status: 'pending'})
+    const deliverys = await DeliveryModel.find({ deliveryManID: req.query.deliveryManID, status: 'cooking'})
     if (!deliverys) {
         res.status(400)
         throw new Error('deliverys not found')

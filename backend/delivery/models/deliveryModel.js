@@ -30,7 +30,7 @@ const deliverySchema = mongoose.Schema(
         status: {
             type: String,
             required: true,
-            default: 'pending'
+            default: 'cooking'
         }
     },
     { timestamps: true }

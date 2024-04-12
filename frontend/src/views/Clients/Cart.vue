@@ -60,8 +60,6 @@ export default {
                 expiryDate: '',
                 cvv: ''
             }
-
-
         };
     },
     computed: {
@@ -82,12 +80,13 @@ export default {
             this.order.items = cart;
         },
         placeOrder() {
-            apiService.fetchJsonWithToken('/api/orders', 'http://localhost:5010', 'POST', this.order)
+            console.log('Order placed', this.order.items);
+            apiService.fetchJsonWithToken('/api/orders/add', 'http://localhost:5010', 'POST', this.order.items)
                 .then(response => {
                     localStorage.setItem('orderID', JSON.stringify(response.message));
                 });
             
-            console.log('Order placed', this.order);
+            
             console.log('Payment Info:', this.paymentInfo);
             this.showModal = true;
             this.showOrderForm = false;
