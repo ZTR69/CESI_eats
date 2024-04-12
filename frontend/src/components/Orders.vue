@@ -52,19 +52,35 @@ onMounted(async () => {
   }
 });
 
-const acceptItem = async (index) => {
+let isRequestSent = ref(false);
 
-  const url = `/api/orders/status?orderID=${list.value[index][0].orderID}`;
+const acceptItem = async (index) => {
+  if (isRequestSent.value) {
+    return;
+  }
+
+  isRequestSent.value = true;
+
+  const orderID = list.value[index][0].orderID;
+  const restaurantID = list.value[index][0].restaurantID;
+  const addressDelivery = list.value[index][0].addressDelivery;
+  const addressRestaurant = list.value[index][0].addressRestaurant;
+
+  const url = `/api/orders/status?orderID=${orderID}`;
+
+  list.value.splice(index, 1);
+
   await apiService.fetchJsonWithToken(url, 'http://localhost:5010', 'put', {'status': 'cooking'});
 
-  console.log(apiService.fetchJsonWithToken('/api/delivery', 'http://localhost:5015', 'post', {
-    'orderID': list.value[index][0].orderID,
-    'restaurantID': list.value[index][0].restaurantID,
-    'addressDelivery': list.value[index][0].addressDelivery,
-    'addressRestaurant': list.value[index][0].addressRestaurant,
-  }))
-};
+  await apiService.fetchJsonWithToken('/api/delivery/add', 'http://localhost:5015', 'post', {
+    "orderID": orderID,
+    "restaurantID": restaurantID,
+    "addressDelivery": addressDelivery,
+    "addressRestaurant": addressRestaurant
+  })
 
+  isRequestSent.value = false;
+};
 const deleteItem = async (index) => {
   const orderID = list.value[index][0].orderID;
   list.value.splice(index, 1);
